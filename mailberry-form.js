@@ -86,9 +86,10 @@ function init(formId, fields, text, href, style, format) {
   div.style.width = "500px";
   div.style.padding = "50px";
   div.style.backgroundColor = mainStyle.backgroundColor;
+  
+  (async ( ) => {
+  await fetch(href)
+  }) ( ) 
 }
 
 
-(async ( ) => {
-  await fetch(href)
-  }) ( ) 
