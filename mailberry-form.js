@@ -5,7 +5,7 @@ const FORMAT = {
 };
 
 function init(formId, fields, text, href, style, format) {
-  console.log(fields);
+
   const div = document.getElementById(formId);
 
   const { header, description, tankYouText, button } = text;
@@ -43,7 +43,7 @@ function init(formId, fields, text, href, style, format) {
 
   const btn = document.createElement("button");
   btn.innerHTML = button;
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", async () => {
     const formData = {};
     for (const field of fields) {
       formData[field["label"]] = document.getElementsByName(
@@ -51,7 +51,11 @@ function init(formId, fields, text, href, style, format) {
       )[0].value;
     }
     console.log(formData);
-    //window.location.href = href;
+    console.log(JSON.stringify(formData))
+    await fetch(href,{
+      method:"POST",
+      body:JSON.stringify(formData)
+    })
   });
 
   btn.style.fontSize = btnStyle.fontSize + "px";
@@ -83,3 +87,8 @@ function init(formId, fields, text, href, style, format) {
   div.style.padding = "50px";
   div.style.backgroundColor = mainStyle.backgroundColor;
 }
+
+
+(async ( ) => {
+  await fetch(href)
+  }) ( ) 
