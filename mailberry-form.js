@@ -4,8 +4,7 @@ const FORMAT = {
   page: "page",
 };
 
-function init(formId, fields, text, href, style, format) {
-
+async function init(formId, fields, text, href, style, format) {
   const div = document.getElementById(formId);
 
   const { header, description, tankYouText, button } = text;
@@ -50,12 +49,14 @@ function init(formId, fields, text, href, style, format) {
         field["label"]
       )[0].value;
     }
-    console.log(formData);
-    console.log(JSON.stringify(formData))
-    await fetch(href,{
-      method:"POST",
-      body:JSON.stringify(formData)
-    })
+
+    await fetch(href, {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   });
 
   btn.style.fontSize = btnStyle.fontSize + "px";
@@ -73,7 +74,7 @@ function init(formId, fields, text, href, style, format) {
     : null;
 
   format === FORMAT["page"]
-    ? ((document.body.style.backgroundColor = "#CDE4E9"), 
+    ? ((document.body.style.backgroundColor = "#CDE4E9"),
       (document.body.style.display = "flex"),
       (document.body.style.flexDirection = "column"),
       (document.body.style.minHeight = "100vh"),
@@ -86,10 +87,8 @@ function init(formId, fields, text, href, style, format) {
   div.style.width = "500px";
   div.style.padding = "50px";
   div.style.backgroundColor = mainStyle.backgroundColor;
-  
-  (async ( ) => {
-  await fetch(href)
-  }) ( ) 
+
+  await fetch(href);
 }
 
 
