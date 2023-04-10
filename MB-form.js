@@ -6,43 +6,62 @@ const FORMAT = {
 
 async function init(formId, fields, text, href, style, format) {
   const div = document.getElementById(formId);
+  const formWrapper = document.createElement("div");
+  formWrapper.classList.add("form-wrapper");
 
   const { header, description, tankYouText, button } = text;
   const { headStyle, labelStyle, btnStyle, mainStyle, descriptionStyle } =
     style;
 
-  const heading = document.createElement("h2");
+  const heading = document.createElement("p");
+  heading.classList.add("heading");
   heading.innerHTML = header;
   heading.style.fontSize = headStyle.fontSize + "px";
   heading.style.fontFamily = headStyle.fontFamily;
   heading.style.color = headStyle.color;
   div.appendChild(heading);
 
-  const about = document.createElement("p");
-  about.innerHTML = description;
-  about.style.fontSize = descriptionStyle.fontSize + "px";
-  about.style.fontFamily = descriptionStyle.fontFamily;
-  about.style.color = descriptionStyle.color;
-  div.appendChild(about);
+    const about = document.createElement("p");
+    about.classList.add("description");
+    about.innerHTML = description;
+    about.style.fontSize = descriptionStyle.fontSize + "px";
+    about.style.fontFamily = descriptionStyle.fontFamily;
+    about.style.color = descriptionStyle.color;
+    formWrapper.appendChild(about);
+  
+    const divider = document.createElement("hr");
+    divider.classList.add("divider");
+    formWrapper.appendChild(divider);
 
   for (const field of fields) {
+    const inputWrapper = document.createElement("div");
+    inputWrapper.classList.add("input-wrapper");
+
     const label = document.createElement("label");
     label.innerHTML = field["label"];
     label.style.fontSize = labelStyle.fontSize + "px";
     label.style.fontFamily = labelStyle.fontFamily;
     label.style.color = labelStyle.color;
-    div.appendChild(label);
+    inputWrapper.appendChild(label);
+    
     const input = document.createElement("input");
     input.type = field["type"];
     input.name = field["label"];
-    div.appendChild(input);
+    input.classList.add("input");
+    inputWrapper.appendChild(input);
 
-    div.appendChild(document.createElement("br"));
+    formWrapper.appendChild(inputWrapper);
   }
 
+  const btnWrapper = document.createElement("div");
+  btnWrapper.classList.add("btn-wrapper");
+
   const btn = document.createElement("button");
+  btn.classList.add("btn");
+
   btn.innerHTML = button;
-  btn.addEventListener("click", async () => {
+
+  btn.addEventListener("click", () => {
     const formData = {};
     for (const field of fields) {
       formData[field["label"]] = document.getElementsByName(
@@ -50,7 +69,7 @@ async function init(formId, fields, text, href, style, format) {
       )[0].value;
     }
 
-    await fetch(href, {
+    fetch(href, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
@@ -59,36 +78,29 @@ async function init(formId, fields, text, href, style, format) {
     });
   });
 
+
   btn.style.fontSize = btnStyle.fontSize + "px";
   btn.style.fontFamily = btnStyle.fontFamily;
   btn.style.color = btnStyle.color;
   btn.style.backgroundColor = btnStyle.backgroundColor;
-  div.appendChild(btn);
+
+  btnWrapper.appendChild(btn);
+  formWrapper.appendChild(btnWrapper);
 
   format === FORMAT["popup"]
-    ? ((div.style.transform = "translate(-50%, -50%)"),
-      (div.style.top = "50%"),
-      (div.style.left = "50%"),
-      (div.style.zIndex = "9999"),
-      (div.style.position = "absolute"))
+    ? ((div.classList.add("form-builder-format-popup")))
     : null;
 
-  format === FORMAT["page"]
-    ? ((document.body.style.backgroundColor = "#CDE4E9"),
-      (document.body.style.display = "flex"),
-      (document.body.style.flexDirection = "column"),
-      (document.body.style.minHeight = "100vh"),
-      (document.body.style.justifyContent = "center"),
-      (document.body.style.alignItems = "center"))
+  format === FORMAT['page']
+    ? ((document.body.style.backgroundColor = mainStyle.backgroundColor),
+      document.body.classList.add('form-builder-format-page'))
     : null;
 
-  div.style.display = "flex";
-  div.style.flexDirection = "column";
-  div.style.width = "500px";
-  div.style.padding = "50px";
+  div.appendChild(formWrapper);
+  div.classList.add("form-builder-body");
   div.style.backgroundColor = mainStyle.backgroundColor;
 
-  await fetch(href);
+  fetch(href);
 }
 
 
