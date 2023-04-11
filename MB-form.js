@@ -87,16 +87,43 @@ async function init(formId, fields, text, href, style, format) {
   btnWrapper.appendChild(btn);
   formWrapper.appendChild(btnWrapper);
 
+  const singWrapper = document.createElement("div");
+  singWrapper.classList.add("sing-wrapper");
+  const MBSingWrapper = document.createElement("a");
+  MBSingWrapper.classList.add("MBSing-wrapper");
+  const poweredBy = document.createElement("p");
+  poweredBy.classList.add("powered-by");
+  const MBSing = document.createElement("p");
+  MBSing.classList.add("MBSing");
+
+  poweredBy.innerHTML = "Powered by";
+  MBSing.innerHTML = "Mailberry";
+
+
+  poweredBy.style.color = headStyle.color;
+  MBSing.style.color = headStyle.color;
+  
+  MBSingWrapper.href = 'https://mailberry.ai/';
+  MBSingWrapper.target = '_blank';
+  MBSingWrapper.rel = 'noopener noreferrer';
+
+
+  MBSingWrapper.appendChild(MBSing);
+
+  singWrapper.appendChild(poweredBy);
+  singWrapper.appendChild(MBSingWrapper);  
+  
   format === FORMAT["popup"]
-    ? ((div.classList.add("form-builder-format-popup")))
-    : null;
-
+  ? ((div.classList.add("form-builder-format-popup")))
+  : null;
+  
   format === FORMAT['page']
-    ? ((document.body.style.backgroundColor = mainStyle.backgroundColor),
-      document.body.classList.add('form-builder-format-page'))
-    : null;
-
+  ? ((document.body.style.backgroundColor = mainStyle.backgroundColor),
+  document.body.classList.add('form-builder-format-page'))
+  : null;
+  
   div.appendChild(formWrapper);
+  div.appendChild(singWrapper);
   div.classList.add("form-builder-body");
   div.style.backgroundColor = mainStyle.backgroundColor;
 
