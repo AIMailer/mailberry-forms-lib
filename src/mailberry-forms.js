@@ -1,10 +1,144 @@
 const FORMAT = {
-  snippet: 'snippet',
-  popup: 'popup',
-  page: 'page',
+  snippet: "snippet",
+  popup: "popup",
+  page: "page",
 };
 
-async function init(formId, fields, text, href, style, format) {
+const css = `
+.heading {
+  margin-bottom: 20px;
+  max-width: 400px;
+  line-break: anywhere;
+  text-align: center;
+}
+
+.description {
+  line-height: 1.5;
+  margin: 0;
+}
+
+.divider {
+  padding: 1px 1px;
+  border: none;
+  margin: 1em 0;
+  background-color: #ccc;
+}
+
+.form-builder-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.form-builder-format-page {
+ display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-builder-format-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.form-wrapper {
+  width: 400px;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+.thank-you-wrapper {
+  display: none;
+}
+
+.thank-you-message {
+  margin: 10px;
+  text-align: center;
+}
+
+.error-wrapper {
+  display: none;
+}
+
+.error-message {
+  margin: 10px;
+  text-align: center;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  padding: 11px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.btn-wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.btn {
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.sing-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px
+}
+
+.powered-by {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8px;
+}
+
+.MBSing {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8px;
+  margin-left: 2px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0;
+  right: 25;
+  font-size: 20;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+`
+export function init(formId, fields, text, href, style, format) {
+  // add styles
+  var styletag = document.createElement('style');
+  styletag.type = 'text/css';
+  styletag.innerHTML = css;
+  document.getElementsByTagName('head')[0].appendChild(styletag);
+
+  // add form
   const div = document.getElementById(formId);
 
   const { header, description, thanksMessage, button } = text;
@@ -37,7 +171,7 @@ async function init(formId, fields, text, href, style, format) {
     about.style.fontFamily = descriptionThanksMessageAndSignStyle.fontFamily;
     about.style.color = descriptionThanksMessageAndSignStyle.color;
     formWrapper.appendChild(about);
-  
+
     const divider = document.createElement('hr');
     divider.classList.add('divider');
     formWrapper.appendChild(divider);
@@ -248,7 +382,7 @@ async function init(formId, fields, text, href, style, format) {
   format === FORMAT['page']
     ? ((document.body.style.backgroundColor = mainStyle.pageColor),
 
-    // TODO: Check this clases 
+    // TODO: Check this clases
       document.body.classList.add('form-builder-format-page'),
       div.classList.add('form-builder-body'))
     : null;
