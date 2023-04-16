@@ -12,4 +12,12 @@ module.exports = {
       type: 'umd',
     },
   },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+    ],
+  },
 };
