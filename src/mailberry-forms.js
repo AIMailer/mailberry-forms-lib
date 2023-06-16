@@ -106,9 +106,9 @@ const css = `
 }
 
 .sing-wrapper {
+  width: 400px;
   display: flex;
   justify-content: center;
-  margin-top: 20px
 }
 
 .powered-by {
@@ -131,7 +131,7 @@ const css = `
   cursor: pointer;
 }
 `
-export function init(formId, fields, text, href, style, format) {
+export function init(formId, fields, text, href, style, format,sing) {
   // add styles
   var styletag = document.createElement('style');
   styletag.type = 'text/css';
@@ -388,12 +388,12 @@ export function init(formId, fields, text, href, style, format) {
       div.classList.add('form-builder-body'))
     : null;
 
-  formWrapper.style.backgroundColor = mainStyle.formColor
-  formWrapper.appendChild(form);
-  formWrapper.appendChild(singWrapper);
-  div.appendChild(formWrapper);
-  div.appendChild(thankYouWrapper);
-  div.appendChild(errorWrapper);
+    formWrapper.style.backgroundColor = mainStyle.formColor
+    formWrapper.appendChild(form);
+    div.appendChild(formWrapper);
+    if(sing)div.appendChild(singWrapper);
+    div.appendChild(thankYouWrapper);
+    div.appendChild(errorWrapper);
 
   fetch(href);
 }
