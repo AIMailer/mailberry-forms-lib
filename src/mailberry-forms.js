@@ -8,7 +8,7 @@ const css = `
 .heading {
   margin-bottom: 20px;
   max-width: 400px;
-  line-break: anywhere;
+  line-break: auto;
   text-align: center;
 }
 
@@ -272,13 +272,14 @@ export function init(formId, fields, text, href, style, format) {
       fieldsErrors.style.display = 'none';
       const formData = {};
       for (const field of fields) {
-        formData[field['label']] = document.getElementsByName(
+        formData[field['label'].toLowerCase()] = document.getElementsByName(
           field['label']
         )[0].value;
       }
 
-      fetch('asdasd', {
+      fetch(href, {
         method: 'POST',
+        referrerPolicy: 'strict-origin-when-cross-origin',
         body: JSON.stringify(formData),
         headers: {
           'Content-Type': 'application/json',
@@ -288,7 +289,7 @@ export function init(formId, fields, text, href, style, format) {
           formWrapper.style.display = 'none';
           thankYouWrapper.style.display = 'block';
         })
-        .catch(() => {
+        .catch((err) => {
           formWrapper.style.display = 'none';
           errorWrapper.style.display = 'block';
         });
