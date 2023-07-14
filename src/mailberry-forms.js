@@ -391,8 +391,8 @@ export function init(formId, fields, text, href, style, format,sing) {
     formWrapper.style.backgroundColor = mainStyle.formColor
     formWrapper.appendChild(form);
     div.appendChild(formWrapper);
-    if(sing)div.appendChild(singWrapper);
     div.appendChild(thankYouWrapper);
+    if(sing)div.appendChild(singWrapper);
     div.appendChild(errorWrapper);
 
   fetch(href);
