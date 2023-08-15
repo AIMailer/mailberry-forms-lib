@@ -357,7 +357,7 @@ export function init(formId, fields, text, href, style, format,sing) {
   poweredBy.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
   MBSing.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
 
-  MBSingWrapper.href = 'https://mailberry.ai/';
+  MBSingWrapper.href = 'https://mailberry.ai/?utm_source=Form&utm_medium=Mailberry&utm_campaign=CustomersAreFrom';
   MBSingWrapper.target = '_blank';
   MBSingWrapper.rel = 'noopener noreferrer';
 
