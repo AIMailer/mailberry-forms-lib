@@ -24,6 +24,11 @@ const css = `
   background-color: #ccc;
 }
 
+.form-container {
+  width: 400px;
+  border-radius: 12px;
+}
+
 .form-builder-body {
   display: flex;
   flex-direction: column;
@@ -55,10 +60,7 @@ const css = `
   padding-left: 30px;
   padding-right: 30px;
   padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-radius: 12px;
   box-sizing: border-box;
-  margin-top: 10px;
 }
 
 .thank-you-wrapper {
@@ -106,7 +108,7 @@ const css = `
 }
 
 .sing-wrapper {
-  width: 400px;
+  margin-top: 20px;
   display: flex;
   justify-content: center;
 }
@@ -125,7 +127,7 @@ const css = `
 .close-btn {
   position: absolute;
   top: 0;
-  right: 25;
+  right: 25px;
   font-size: 20;
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
@@ -144,10 +146,16 @@ export function init(formId, fields, text, href, style, format,sing) {
   const { header, description, thanksMessage, button } = text;
   const { headStyle, labelStyle, btnStyle, mainStyle, descriptionThanksMessageAndSignStyle } = style;
 
+  // Removing all padding and margin from body tag (some browsers gives this value by default)
+  document.body.style.margin = 0;
+  document.body.style.padding = 0;
+
   //  ======== Form wrapper =========
 
 
   const formWrapper = document.createElement('div');
+  const formContainer = document.createElement('div') 
+  formContainer.classList.add('form-container');
   formWrapper.classList.add('form-wrapper');
 
   //  ======== Header =========
@@ -230,6 +238,16 @@ export function init(formId, fields, text, href, style, format,sing) {
     form.appendChild(inputWrapper);
   }
 
+  //  ======== Loader when submit =========
+
+  const loaderWrapper = document.createElement('div');
+  const spinner = document.createElement('div')
+  loaderWrapper.classList.add('form-wrapper');
+  loaderWrapper.classList.add('spinner-wrapper');
+  spinner.classList.add('spinner');
+  loaderWrapper.appendChild(spinner);
+  formContainer.appendChild(loaderWrapper);
+
   //  ======== Submit Button =========
 
   const btnWrapper = document.createElement('div');
@@ -277,6 +295,9 @@ export function init(formId, fields, text, href, style, format,sing) {
         )[0].value;
       }
 
+      loaderWrapper.style.display = 'flex'
+      formWrapper.style.display = 'none';
+
       fetch(href, {
         method: 'POST',
         referrerPolicy: 'strict-origin-when-cross-origin',
@@ -286,13 +307,13 @@ export function init(formId, fields, text, href, style, format,sing) {
         },
       })
         .then((res) => {
-          formWrapper.style.display = 'none';
           thankYouWrapper.style.display = 'block';
+          loaderWrapper.style.display = 'none';
         })
         .catch((err) => {
-          formWrapper.style.display = 'none';
           errorWrapper.style.display = 'block';
-        });
+          loaderWrapper.style.display = 'none';
+        })
     }
   });
 
@@ -375,25 +396,26 @@ export function init(formId, fields, text, href, style, format,sing) {
     div.style.display = 'none';
   });
 
-  format === FORMAT['popup']
-    ? (div.classList.add('form-builder-format-popup'),
-      div.appendChild(closePopup))
-    : null;
+  if(format === FORMAT['popup']){
+    div.classList.add('form-builder-format-popup')
+    div.appendChild(closePopup)
+    document.body.style.backgroundColor = mainStyle.pageColor
+  }
 
-  format === FORMAT['page']
-    ? ((document.body.style.backgroundColor = mainStyle.pageColor),
+  if(format === FORMAT['page']){
+    document.body.style.backgroundColor = mainStyle.pageColor
+    document.body.classList.add('form-builder-format-page'),
+    div.classList.add('form-builder-body')
+  }
 
-    // TODO: Check this clases
-      document.body.classList.add('form-builder-format-page'),
-      div.classList.add('form-builder-body'))
-    : null;
+  formContainer.style.backgroundColor = mainStyle.formColor
+  formWrapper.appendChild(form);
 
-    formWrapper.style.backgroundColor = mainStyle.formColor
-    formWrapper.appendChild(form);
-    div.appendChild(formWrapper);
-    div.appendChild(thankYouWrapper);
-    if(sing)div.appendChild(singWrapper);
-    div.appendChild(errorWrapper);
+  formContainer.appendChild(formWrapper);
+  formContainer.appendChild(thankYouWrapper);
+  if(sing)formWrapper.appendChild(singWrapper);
+  formContainer.appendChild(errorWrapper);
+  div.appendChild(formContainer)
 
   fetch(href);
 }
