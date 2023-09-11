@@ -65,6 +65,7 @@ const css = `
 
 .thank-you-wrapper {
   display: none;
+  padding-bottom: 20px;
 }
 
 .thank-you-message {
@@ -74,6 +75,7 @@ const css = `
 
 .error-wrapper {
   display: none;
+  padding-bottom: 20px;
 }
 
 .error-message {
@@ -131,6 +133,35 @@ const css = `
   font-size: 20;
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
+}
+
+.loader-wrapper {
+  display: none;
+}
+
+.spinner-wrapper {
+  display: none;
+  justify-content: center;
+  items-content: center;
+  padding-bottom: 30px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 4px solid #727ef2;
+  border-top-color: #4147f2;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 `
 export function init(formId, fields, text, href, style, format,sing) {
