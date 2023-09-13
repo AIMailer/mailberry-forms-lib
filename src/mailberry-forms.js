@@ -580,3 +580,9 @@ function init(formId, fields, text, href, style, format, sing, showAt) {
 
   fetch(href);
 }
+
+function handlePopup(showAt){
+  if(showAt === POPUP_OPTIONS['immediately']){
+
+  }
+}
