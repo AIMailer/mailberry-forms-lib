@@ -529,7 +529,7 @@ function init(formId, fields, text, href, style, format, sing, showAt) {
       let timer = 0
       if(showAt === POPUP_OPTIONS['immediately']) timer = 0;
       if(showAt === POPUP_OPTIONS['after-10-seconds']) timer = 10;
-      if(showAt === POPUP_OPTIONS['after-30-seconds']) timer = 4;
+      if(showAt === POPUP_OPTIONS['after-30-seconds']) timer = 30;
 
       setTimeout(() => {
         formContainer.style.backgroundColor = mainStyle.formColor
