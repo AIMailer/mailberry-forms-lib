@@ -4,6 +4,13 @@ const FORMAT = {
   page: "page",
 };
 
+const POPUP_OPTIONS = {
+  'immediately': "immediately",
+  'after-10-seconds': "after-10-seconds",
+  'after-30-seconds': "after-30-seconds",
+  'at-30-percent-of-pageview': "at-30-percent-of-pageview"
+}
+
 const css = `
 .heading {
   margin-bottom: 20px;
@@ -164,7 +171,7 @@ const css = `
   }
 }
 `
-export function init(formId, fields, text, href, style, format,sing) {
+export function init(formId, fields, text, href, style, format, sing, showAt) {
   // add styles
   var styletag = document.createElement('style');
   styletag.type = 'text/css';
@@ -431,6 +438,8 @@ export function init(formId, fields, text, href, style, format,sing) {
     div.classList.add('form-builder-format-popup')
     div.appendChild(closePopup)
     document.body.style.backgroundColor = mainStyle.pageColor
+
+    
   }
 
   if(format === FORMAT['page']){
@@ -449,4 +458,10 @@ export function init(formId, fields, text, href, style, format,sing) {
   div.appendChild(formContainer)
 
   fetch(href);
+}
+
+function handlePopup(showAt){
+  if(showAt === POPUP_OPTIONS['immediately']){
+
+  }
 }
