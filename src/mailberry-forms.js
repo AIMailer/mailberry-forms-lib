@@ -1,3 +1,4 @@
+
 const FORMAT = {
   snippet: "snippet",
   popup: "popup",
@@ -559,8 +560,6 @@ function init(formId, fields, text, href, style, format, sing, showAt) {
       }, timer * 1000);
       return
     }
-
-    return
   }
 
   if(format === FORMAT['page']){
@@ -579,10 +578,4 @@ function init(formId, fields, text, href, style, format, sing, showAt) {
   div.appendChild(formContainer)
 
   fetch(href);
-}
-
-function handlePopup(showAt){
-  if(showAt === POPUP_OPTIONS['immediately']){
-
-  }
 }
