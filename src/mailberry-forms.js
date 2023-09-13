@@ -4,8 +4,16 @@ const FORMAT = {
   page: "page",
 };
 
+const POPUP_OPTIONS = {
+  'immediately': "immediately",
+  'after-10-seconds': "after-10-seconds",
+  'after-30-seconds': "after-30-seconds",
+  'at-30-percent-of-pageview': "at-30-percent-of-pageview"
+}
+
 const css = `
 .heading {
+  margin-top: 20px;
   margin-bottom: 20px;
   max-width: 400px;
   line-break: auto;
@@ -39,7 +47,7 @@ const css = `
 }
 
 .form-builder-format-page {
- display: flex;
+  display: flex;
   flex-direction: column;
   min-height: 100vh;
   justify-content: center;
@@ -127,10 +135,11 @@ const css = `
 }
 
 .close-btn {
+  margin: 20px 0;
   position: absolute;
   top: 0;
   right: 25px;
-  font-size: 20;
+  font-size: 20px;
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
 }
@@ -155,6 +164,17 @@ const css = `
   animation: spin 1s linear infinite;
 }
 
+.overlay {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  background-color: rgba(0, 1, 5, 0.8);
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -163,8 +183,26 @@ const css = `
     transform: rotate(360deg);
   }
 }
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-out {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.1);
+  }
+}
 `
-export function init(formId, fields, text, href, style, format,sing) {
+function init(formId, fields, text, href, style, format, sing, showAt) {
   // add styles
   var styletag = document.createElement('style');
   styletag.type = 'text/css';
@@ -185,7 +223,7 @@ export function init(formId, fields, text, href, style, format,sing) {
 
 
   const formWrapper = document.createElement('div');
-  const formContainer = document.createElement('div') 
+  const formContainer = document.createElement('div')
   formContainer.classList.add('form-container');
   formWrapper.classList.add('form-wrapper');
 
@@ -418,6 +456,11 @@ export function init(formId, fields, text, href, style, format,sing) {
   singWrapper.appendChild(poweredBy);
   singWrapper.appendChild(MBSingWrapper);
 
+  //  ======== Overlay container, if used =========
+  const overlayContainer = document.createElement('div');
+  overlayContainer.classList.add('overlay')
+  overlayContainer.style.zIndex = '9998';
+
   //  ======== Popup close button =========
 
   const closePopup = document.createElement('p');
@@ -425,12 +468,99 @@ export function init(formId, fields, text, href, style, format,sing) {
   closePopup.innerHTML = 'X';
   closePopup.addEventListener('click', () => {
     div.style.display = 'none';
+    overlayContainer.style.zIndex = '-99999';
+    overlayContainer.style.display = 'none'
+    formContainer.style.animation = 'scale-out 0.2s linear';
   });
 
   if(format === FORMAT['popup']){
     div.classList.add('form-builder-format-popup')
-    div.appendChild(closePopup)
-    document.body.style.backgroundColor = mainStyle.pageColor
+    formContainer.appendChild(closePopup)
+
+    //  ======== At 30 percent of pageview =========
+    if(showAt === POPUP_OPTIONS['at-30-percent-of-pageview']){
+      function checkScrollPosition() {
+        const percent = 0.3
+        const scrollY = window.scrollY;
+        const fullHeight = document.documentElement.scrollHeight;
+        const windowHeight = window.innerHeight;
+        const thirtyPercentOfPageview = fullHeight * percent;
+
+        // Checks if the user has scrolled at least 30% of the page
+        if (scrollY + windowHeight >= thirtyPercentOfPageview) {
+          formContainer.style.backgroundColor = mainStyle.formColor
+          formWrapper.appendChild(form);
+
+          formContainer.appendChild(formWrapper);
+          formContainer.appendChild(thankYouWrapper);
+          if(sing)formWrapper.appendChild(singWrapper);
+          formContainer.appendChild(errorWrapper);
+          div.appendChild(formContainer)
+
+           // we already have a div with an id so we need to append it at body element
+          overlayContainer.appendChild(div);
+          document.body.appendChild(overlayContainer);
+          formContainer.style.animation = 'scale-in 0.8s linear';
+          overlayContainer.style.cursor = 'pointer';
+          formContainer.style.cursor = 'auto'
+
+          overlayContainer.addEventListener('click', (e) => {
+            if(event.target === overlayContainer){
+              overlayContainer.style.zIndex = '-99999';
+              overlayContainer.style.display = 'none'
+              formContainer.style.animation = 'scale-out 0.2s linear';
+            }
+          })
+
+          fetch(href)
+
+          // removing the event if the form it has already been called
+          window.removeEventListener('scroll', checkScrollPosition);
+          return
+        }
+      }
+
+      window.addEventListener('scroll', checkScrollPosition)
+      return
+    }
+    //  ======== With time =========
+    else {
+      let timer = 0
+      if(showAt === POPUP_OPTIONS['immediately']) timer = 0;
+      if(showAt === POPUP_OPTIONS['after-10-seconds']) timer = 10;
+      if(showAt === POPUP_OPTIONS['after-30-seconds']) timer = 4;
+
+      setTimeout(() => {
+        formContainer.style.backgroundColor = mainStyle.formColor
+        formWrapper.appendChild(form);
+
+        formContainer.appendChild(formWrapper);
+        formContainer.appendChild(thankYouWrapper);
+        if(sing)formWrapper.appendChild(singWrapper);
+        formContainer.appendChild(errorWrapper);
+        div.appendChild(formContainer)
+
+        // we already have a div with an id so we need to append it at body element
+        overlayContainer.appendChild(div);
+        document.body.appendChild(overlayContainer);
+        formContainer.style.animation = 'scale-in 0.8s linear';
+        overlayContainer.style.cursor = 'pointer';
+        formContainer.style.cursor = 'auto'
+
+        overlayContainer.addEventListener('click', (e) => {
+          if(event.target === overlayContainer){
+            overlayContainer.style.zIndex = '-99999';
+            overlayContainer.style.display = 'none'
+            formContainer.style.animation = 'scale-out 0.2s linear';
+          }
+        })
+
+        fetch(href)
+      }, timer * 1000);
+      return
+    }
+
+    return
   }
 
   if(format === FORMAT['page']){
