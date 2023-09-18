@@ -118,7 +118,7 @@ const css = `
   cursor: pointer;
 }
 
-.sing-wrapper {
+.signature-wrapper {
   margin-top: 20px;
   display: flex;
   justify-content: center;
@@ -129,7 +129,7 @@ const css = `
   font-size: 8px;
 }
 
-.MBSing {
+.MBsignature {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8px;
   margin-left: 2px;
@@ -203,7 +203,7 @@ const css = `
   }
 }
 `
-function init(formId, fields, text, href, style, format, sing, showAt) {
+export function init(formId, fields, text, href, style, format, signature, showAt) {
   // add styles
   var styletag = document.createElement('style');
   styletag.type = 'text/css';
@@ -432,30 +432,30 @@ function init(formId, fields, text, href, style, format, sing, showAt) {
 
   //  ======== Mailberry Sign =========
 
-  const singWrapper = document.createElement('div');
-  singWrapper.classList.add('sing-wrapper');
-  const MBSingWrapper = document.createElement('a');
-  MBSingWrapper.classList.add('MBSing-wrapper');
+  const signatureWrapper = document.createElement('div');
+  signatureWrapper.classList.add('signature-wrapper');
+  const MBsignatureWrapper = document.createElement('a');
+  MBsignatureWrapper.classList.add('MBsignature-wrapper');
   const poweredBy = document.createElement('p');
   poweredBy.classList.add('powered-by');
-  const MBSing = document.createElement('p');
-  MBSing.classList.add('MBSing');
-  MBSingWrapper.style.textDecorationColor = descriptionThanksMessageAndSignStyle.color;
+  const MBsignature = document.createElement('p');
+  MBsignature.classList.add('MBsignature');
+  MBsignatureWrapper.style.textDecorationColor = descriptionThanksMessageAndSignStyle.color;
 
   poweredBy.innerHTML = 'Powered by';
-  MBSing.innerHTML = 'MailBerry';
+  MBsignature.innerHTML = 'MailBerry';
 
   poweredBy.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
-  MBSing.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
+  MBsignature.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
 
-  MBSingWrapper.href = 'https://mailberry.ai/?utm_source=Form&utm_medium=Mailberry&utm_campaign=CustomersAreFrom';
-  MBSingWrapper.target = '_blank';
-  MBSingWrapper.rel = 'noopener noreferrer';
+  MBsignatureWrapper.href = 'https://mailberry.ai/?utm_source=Form&utm_medium=Mailberry&utm_campaign=CustomersAreFrom';
+  MBsignatureWrapper.target = '_blank';
+  MBsignatureWrapper.rel = 'noopener noreferrer';
 
-  MBSingWrapper.appendChild(MBSing);
+  MBsignatureWrapper.appendChild(MBsignature);
 
-  singWrapper.appendChild(poweredBy);
-  singWrapper.appendChild(MBSingWrapper);
+  signatureWrapper.appendChild(poweredBy);
+  signatureWrapper.appendChild(MBsignatureWrapper);
 
   //  ======== Overlay container, if used =========
   const overlayContainer = document.createElement('div');
@@ -494,7 +494,7 @@ function init(formId, fields, text, href, style, format, sing, showAt) {
 
           formContainer.appendChild(formWrapper);
           formContainer.appendChild(thankYouWrapper);
-          if(sing)formWrapper.appendChild(singWrapper);
+          if(signature)formWrapper.appendChild(signatureWrapper);
           formContainer.appendChild(errorWrapper);
           div.appendChild(formContainer)
 
@@ -537,7 +537,7 @@ function init(formId, fields, text, href, style, format, sing, showAt) {
 
         formContainer.appendChild(formWrapper);
         formContainer.appendChild(thankYouWrapper);
-        if(sing)formWrapper.appendChild(singWrapper);
+        if(signature)formWrapper.appendChild(signatureWrapper);
         formContainer.appendChild(errorWrapper);
         div.appendChild(formContainer)
 
@@ -573,7 +573,7 @@ function init(formId, fields, text, href, style, format, sing, showAt) {
 
   formContainer.appendChild(formWrapper);
   formContainer.appendChild(thankYouWrapper);
-  if(sing)formWrapper.appendChild(singWrapper);
+  if(signature)formWrapper.appendChild(signatureWrapper);
   formContainer.appendChild(errorWrapper);
   div.appendChild(formContainer)
 
