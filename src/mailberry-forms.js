@@ -467,6 +467,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
 
   const closePopup = _document.createElement('p');
   closePopup.classList.add('close-btn');
+  closePopup.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
   closePopup.innerHTML = 'X';
   closePopup.addEventListener('click', () => {
     div.style.display = 'none';
