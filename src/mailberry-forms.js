@@ -160,8 +160,8 @@ const css = `
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 4px solid #727ef2;
-  border-top-color: #4147f2;
+  border: 4px solid #cccccc;
+  border-top-color: #999999;
   animation: spin 1s linear infinite;
 }
 
@@ -523,18 +523,18 @@ export function init(window, _document, formId, fields, text, href, style, forma
         }
       }
 
-      window.addEventListener('scroll', checkScrollPosition)
+      window.addEventListener('scroll', checkScrollPosition);
       return
     }
     //  ======== With time =========
     else {
-      let timer = 0
+      let timer = 0;
       if(showAt === FORM_POPUP_OPTIONS['immediately']) timer = 0;
       if(showAt === FORM_POPUP_OPTIONS['after-10-seconds']) timer = 10;
       if(showAt === FORM_POPUP_OPTIONS['after-30-seconds']) timer = 30;
 
       setTimeout(() => {
-        formContainer.style.backgroundColor = mainStyle.formColor
+        formContainer.style.backgroundColor = mainStyle.formColor;
         formWrapper.appendChild(form);
 
         formContainer.appendChild(formWrapper);
@@ -553,7 +553,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
         overlayContainer.addEventListener('click', (e) => {
           if(event.target === overlayContainer){
             overlayContainer.style.zIndex = '-99999';
-            overlayContainer.style.display = 'none'
+            overlayContainer.style.display = 'none';
             formContainer.style.animation = 'opacity-out 0.2s linear';
           }
         })
@@ -566,7 +566,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
 
   if(format === FORMAT['page']){
     _document.body.style.backgroundColor = mainStyle.pageColor
-    _document.body.classList.add('form-builder-format-page'),
+    _document.body.classList.add('form-builder-format-page')
     div.classList.add('form-builder-body')
   }
 
