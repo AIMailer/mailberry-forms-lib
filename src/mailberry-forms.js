@@ -212,10 +212,6 @@ export function init(window, _document, formId, fields, text, href, style, forma
   const { header, description, thanksMessage, button } = text;
   const { headStyle, labelStyle, btnStyle, mainStyle, descriptionThanksMessageAndSignStyle } = style;
 
-  // Removing all padding and margin from body tag (some browsers gives this value by default)
-  _document.body.style.margin = 0;
-  _document.body.style.padding = 0;
-
   //  ======== Form wrapper =========
 
 
