@@ -13,7 +13,7 @@ const FORM_POPUP_OPTIONS = {
 }
 
 const css = `
-.heading {
+.MBheading {
   margin-top: 20px;
   margin-bottom: 20px;
   max-width: 400px;
@@ -21,24 +21,24 @@ const css = `
   text-align: center;
 }
 
-.description {
+.MBdescription {
   line-height: 1.5;
   margin: 0;
 }
 
-.divider {
+.MBdivider {
   padding: 1px 1px;
   border: none;
   margin: 1em 0;
   background-color: #ccc;
 }
 
-.form-container {
+.MBform-container {
   width: 400px;
   border-radius: 12px;
 }
 
-.form-builder-body {
+.MBform-builder-body {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,7 +47,7 @@ const css = `
   border-radius: 5px;
 }
 
-.form-builder-format-page {
+.MBform-builder-format-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -55,7 +55,7 @@ const css = `
   align-items: center;
 }
 
-.form-builder-format-popup {
+.MBform-builder-format-popup {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -63,7 +63,7 @@ const css = `
   z-index: 9999;
 }
 
-.form-wrapper {
+.MBform-wrapper {
   width: 400px;
   padding-top: 30px;
   padding-left: 30px;
@@ -72,59 +72,59 @@ const css = `
   box-sizing: border-box;
 }
 
-.thank-you-wrapper {
+.MBthank-you-wrapper {
   display: none;
   padding-bottom: 20px;
 }
 
-.thank-you-message {
+.MBthank-you-message {
   margin: 10px;
   text-align: center;
 }
 
-.error-wrapper {
+.MBerror-wrapper {
   display: none;
   padding-bottom: 20px;
 }
 
-.error-message {
+.MBerror-message {
   margin: 10px;
   text-align: center;
 }
 
-.input-wrapper {
+.MBinput-wrapper {
   display: flex;
   flex-direction: column;
 }
 
-.input {
+.MBinput {
   padding: 11px;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 5px;
 }
 
-.btn-wrapper {
+.MBbtn-wrapper {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
   width: 100%;
 }
 
-.btn {
+.MBbtn {
   padding: 8px;
   border-radius: 5px;
   border: none;
   cursor: pointer;
 }
 
-.signature-wrapper {
+.MBsignature-wrapper {
   margin-top: 20px;
   display: flex;
   justify-content: center;
 }
 
-.powered-by {
+.MBpowered-by {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8px;
 }
@@ -135,7 +135,7 @@ const css = `
   margin-left: 2px;
 }
 
-.close-btn {
+.MBclose-btn {
   margin: 20px 0;
   position: absolute;
   top: 0;
@@ -145,27 +145,23 @@ const css = `
   cursor: pointer;
 }
 
-.loader-wrapper {
-  display: none;
-}
-
-.spinner-wrapper {
+.MBspinner-wrapper {
   display: none;
   justify-content: center;
   items-content: center;
   padding-bottom: 30px;
 }
 
-.spinner {
+.MBspinner {
   width: 20px;
   height: 20px;
   border-radius: 50%;
   border: 4px solid #cccccc;
   border-top-color: #999999;
-  animation: spin 1s linear infinite;
+  animation: MBspin-animation 1s linear infinite;
 }
 
-.overlay {
+.MBoverlay {
   width: 100% !important;
   height: 100% !important;
   min-width: 100%;
@@ -176,7 +172,7 @@ const css = `
   background-color: rgba(0, 1, 5, 0.8);
 }
 
-@keyframes spin {
+@keyframes MBspin-animation {
   0% {
     transform: rotate(0deg);
   }
@@ -185,7 +181,7 @@ const css = `
   }
 }
 
-@keyframes opacity-in {
+@keyframes MBopacity-in {
   from {
     opacity: 0.2;
   }
@@ -194,7 +190,7 @@ const css = `
   }
 }
 
-@keyframes opacity-out {
+@keyframes MBopacity-out {
   from {
     opacity: 1;
   }
@@ -225,13 +221,13 @@ export function init(window, _document, formId, fields, text, href, style, forma
 
   const formWrapper = _document.createElement('div');
   const formContainer = _document.createElement('div')
-  formContainer.classList.add('form-container');
-  formWrapper.classList.add('form-wrapper');
+  formContainer.classList.add('MBform-container');
+  formWrapper.classList.add('MBform-wrapper');
 
   //  ======== Header =========
   if(header){
     const heading = _document.createElement('p');
-    heading.classList.add('heading');
+    heading.classList.add('MBheading');
     heading.innerHTML = header;
     heading.style.fontSize = headStyle.fontSize + 'px';
     heading.style.fontFamily = headStyle.fontFamily;
@@ -243,7 +239,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
 
   if(description){
     const about = _document.createElement('p');
-    about.classList.add('description');
+    about.classList.add('MBdescription');
     about.innerHTML = description;
     about.style.fontSize = descriptionThanksMessageAndSignStyle.fontSize + 'px';
     about.style.fontFamily = descriptionThanksMessageAndSignStyle.fontFamily;
@@ -251,7 +247,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
     formWrapper.appendChild(about);
 
     const divider = _document.createElement('hr');
-    divider.classList.add('divider');
+    divider.classList.add('MBdivider');
     formWrapper.appendChild(divider);
   }
 
@@ -281,7 +277,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
 
   for (const field of fields) {
     const inputWrapper = _document.createElement('div');
-    inputWrapper.classList.add('input-wrapper');
+    inputWrapper.classList.add('MBinput-wrapper');
 
     const label = _document.createElement('label');
     label.innerHTML = field['label'];
@@ -298,7 +294,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
     const input = _document.createElement('input');
     input.type = field['type'];
     input.name = field['label'];
-    input.classList.add('input');
+    input.classList.add('MBinput');
 
     if (field['required']) {
       input.required = true;
@@ -312,9 +308,9 @@ export function init(window, _document, formId, fields, text, href, style, forma
 
   const loaderWrapper = _document.createElement('div');
   const spinner = _document.createElement('div')
-  loaderWrapper.classList.add('form-wrapper');
-  loaderWrapper.classList.add('spinner-wrapper');
-  spinner.classList.add('spinner');
+  loaderWrapper.classList.add('MBform-wrapper');
+  loaderWrapper.classList.add('MBspinner-wrapper');
+  spinner.classList.add('MBspinner');
   loaderWrapper.appendChild(spinner);
   formContainer.appendChild(loaderWrapper);
 
@@ -322,10 +318,10 @@ export function init(window, _document, formId, fields, text, href, style, forma
   //  ======== Submit Button =========
 
   const btnWrapper = _document.createElement('div');
-  btnWrapper.classList.add('btn-wrapper');
+  btnWrapper.classList.add('MBbtn-wrapper');
 
   const btn = _document.createElement('button');
-  btn.classList.add('btn');
+  btn.classList.add('MBbtn');
   btn.type = 'submit';
   btn.innerHTML = button;
 
@@ -399,13 +395,13 @@ export function init(window, _document, formId, fields, text, href, style, forma
   //  ======== Thanks you message =========
 
   const thankYouWrapper = _document.createElement('div');
-  thankYouWrapper.classList.add('form-wrapper');
-  thankYouWrapper.classList.add('thank-you-wrapper');
+  thankYouWrapper.classList.add('MBform-wrapper');
+  thankYouWrapper.classList.add('MBthank-you-wrapper');
 
   const thankYouMessage = _document.createElement('p');
   thankYouMessage.innerHTML = thanksMessage;
 
-  thankYouMessage.classList.add('thank-you-message');
+  thankYouMessage.classList.add('MBthank-you-message');
 
   thankYouMessage.style.fontSize = descriptionThanksMessageAndSignStyle.fontSize + 'px';
   thankYouMessage.style.fontFamily = descriptionThanksMessageAndSignStyle.fontFamily;
@@ -416,14 +412,14 @@ export function init(window, _document, formId, fields, text, href, style, forma
   //  ======== Error message =========
 
   const errorWrapper = _document.createElement('div');
-  errorWrapper.classList.add('form-wrapper');
-  errorWrapper.classList.add('error-wrapper');
+  errorWrapper.classList.add('MBform-wrapper');
+  errorWrapper.classList.add('MBerror-wrapper');
 
   const errorMessage = _document.createElement('p');
   errorMessage.innerHTML =
     'Something went wrong.';
 
-  errorMessage.classList.add('error-message');
+  errorMessage.classList.add('MBerror-message');
 
   errorMessage.style.fontSize = descriptionThanksMessageAndSignStyle.fontSize + 'px';
   errorMessage.style.fontFamily = descriptionThanksMessageAndSignStyle.fontFamily;
@@ -434,50 +430,49 @@ export function init(window, _document, formId, fields, text, href, style, forma
   //  ======== Mailberry Sign =========
 
   const signatureWrapper = _document.createElement('div');
-  signatureWrapper.classList.add('signature-wrapper');
-  const MBsignatureWrapper = _document.createElement('a');
-  MBsignatureWrapper.classList.add('MBsignature-wrapper');
+  signatureWrapper.classList.add('MBsignature-wrapper');
+  const signatureAnchor = _document.createElement('a');
   const poweredBy = _document.createElement('p');
-  poweredBy.classList.add('powered-by');
-  const MBsignature = _document.createElement('p');
-  MBsignature.classList.add('MBsignature');
-  MBsignatureWrapper.style.textDecorationColor = descriptionThanksMessageAndSignStyle.color;
+  poweredBy.classList.add('MBpowered-by');
+  const signatureContent = _document.createElement('p');
+  signatureContent.classList.add('MBsignature');
+  signatureAnchor.style.textDecorationColor = descriptionThanksMessageAndSignStyle.color;
 
   poweredBy.innerHTML = 'Powered by';
-  MBsignature.innerHTML = 'MailBerry';
+  signatureContent.innerHTML = 'MailBerry';
 
   poweredBy.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
-  MBsignature.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
+  signatureContent.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
 
-  MBsignatureWrapper.href = 'https://mailberry.ai/?utm_source=Form&utm_medium=Mailberry&utm_campaign=CustomersAreFrom';
-  MBsignatureWrapper.target = '_blank';
-  MBsignatureWrapper.rel = 'noopener noreferrer';
+  signatureAnchor.href = 'https://mailberry.ai/?utm_source=Form&utm_medium=Mailberry&utm_campaign=CustomersAreFrom';
+  signatureAnchor.target = '_blank';
+  signatureAnchor.rel = 'noopener noreferrer';
 
-  MBsignatureWrapper.appendChild(MBsignature);
+  signatureAnchor.appendChild(signatureContent);
 
   signatureWrapper.appendChild(poweredBy);
-  signatureWrapper.appendChild(MBsignatureWrapper);
+  signatureWrapper.appendChild(signatureAnchor);
 
   //  ======== Overlay container, if used =========
   const overlayContainer = _document.createElement('div');
-  overlayContainer.classList.add('overlay')
+  overlayContainer.classList.add('MBoverlay')
   overlayContainer.style.zIndex = '9998';
 
   //  ======== Popup close button =========
 
   const closePopup = _document.createElement('p');
-  closePopup.classList.add('close-btn');
+  closePopup.classList.add('MBclose-btn');
   closePopup.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
   closePopup.innerHTML = 'X';
   closePopup.addEventListener('click', () => {
     div.style.display = 'none';
     overlayContainer.style.zIndex = '-99999';
     overlayContainer.style.display = 'none'
-    formContainer.style.animation = 'opacity-out 0.2s linear';
+    formContainer.style.animation = 'MBopacity-out 0.2s linear';
   });
 
   if(format === FORMAT['popup']){
-    div.classList.add('form-builder-format-popup')
+    div.classList.add('MBform-builder-format-popup')
     formContainer.appendChild(closePopup)
 
     //  ======== At 30 percent of pageview =========
@@ -503,7 +498,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
            // we already have a div with an id so we need to append it at body element
           overlayContainer.appendChild(div);
           _document.body.appendChild(overlayContainer);
-          formContainer.style.animation = 'opacity-in 0.4s linear';
+          formContainer.style.animation = 'MBopacity-in 0.4s linear';
           overlayContainer.style.cursor = 'pointer';
           formContainer.style.cursor = 'auto'
 
@@ -511,7 +506,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
             if(event.target === overlayContainer){
               overlayContainer.style.zIndex = '-99999';
               overlayContainer.style.display = 'none'
-              formContainer.style.animation = 'opacity-out 0.2s linear';
+              formContainer.style.animation = 'MBopacity-out 0.2s linear';
             }
           })
 
@@ -546,7 +541,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
         // we already have a div with an id so we need to append it at body element
         overlayContainer.appendChild(div);
         _document.body.appendChild(overlayContainer);
-        formContainer.style.animation = 'opacity-in 0.4s linear';
+        formContainer.style.animation = 'MBopacity-in 0.4s linear';
         overlayContainer.style.cursor = 'pointer';
         formContainer.style.cursor = 'auto'
 
@@ -554,7 +549,7 @@ export function init(window, _document, formId, fields, text, href, style, forma
           if(event.target === overlayContainer){
             overlayContainer.style.zIndex = '-99999';
             overlayContainer.style.display = 'none';
-            formContainer.style.animation = 'opacity-out 0.2s linear';
+            formContainer.style.animation = 'MBopacity-out 0.2s linear';
           }
         })
 
@@ -566,8 +561,8 @@ export function init(window, _document, formId, fields, text, href, style, forma
 
   if(format === FORMAT['page']){
     _document.body.style.backgroundColor = mainStyle.pageColor
-    _document.body.classList.add('form-builder-format-page')
-    div.classList.add('form-builder-body')
+    _document.body.classList.add('MBform-builder-format-page')
+    div.classList.add('MBform-builder-body')
   }
 
   formContainer.style.backgroundColor = mainStyle.formColor
@@ -581,3 +576,4 @@ export function init(window, _document, formId, fields, text, href, style, forma
 
   fetch(href);
 }
+
