@@ -363,7 +363,7 @@ export function init(formId, fields, text, href, style, format,sing) {
 
   MBSingWrapper.appendChild(MBSing);
 
-  singWrapper.appendChild(poweredBy);
+  signatureWrapper.appendChild(poweredBy);
   singWrapper.appendChild(MBSingWrapper);
 
   //  ======== Popup close button =========
