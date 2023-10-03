@@ -199,7 +199,7 @@ const css = `
   }
 }
 `
-export function init(window, _document, formId, fields, text, href, style, format, signature, showAt) {
+export function init(_window, _document, formId, fields, text, href, style, format, signature, showAt) {
   // add styles
   var styletag = _document.createElement('style');
   styletag.type = 'text/css';
@@ -475,9 +475,9 @@ export function init(window, _document, formId, fields, text, href, style, forma
     if(showAt === FORM_POPUP_OPTIONS['at-30-percent-of-pageview']){
       function checkScrollPosition() {
         const percent = 0.3
-        const scrollY = window.scrollY;
-        const fullHeight = _document._documentElement.scrollHeight;
-        const windowHeight = window.innerHeight;
+        const scrollY = _window.scrollY;
+        const fullHeight = _document.documentElement.scrollHeight;
+        const windowHeight = _window.innerHeight;
         const thirtyPercentOfPageview = fullHeight * percent;
 
         // Checks if the user has scrolled at least 30% of the page
@@ -509,12 +509,12 @@ export function init(window, _document, formId, fields, text, href, style, forma
           fetch(href)
 
           // removing the event if the form it has already been called
-          window.removeEventListener('scroll', checkScrollPosition);
+          _window.removeEventListener('scroll', checkScrollPosition);
           return
         }
       }
 
-      window.addEventListener('scroll', checkScrollPosition);
+      _window.addEventListener('scroll', checkScrollPosition);
       return
     }
     //  ======== With time =========
