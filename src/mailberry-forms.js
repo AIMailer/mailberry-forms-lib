@@ -326,9 +326,18 @@ export function init(_window, _document, formId, fields, text, href, style, form
 
     let allFieldsFilled = true;
 
+    const inputNodes=form.getElementsByTagName('INPUT')
+
     for (const field of fields) {
       if (field['required']) {
-        const input = _document.getElementsByName(field['label'])[0];
+
+        let input
+        for (let node of inputNodes){
+          if(node.name===field['label']){
+            input=node
+            break
+          }
+        }
 
         if (!input.value) {
           allFieldsFilled = false;
@@ -353,9 +362,15 @@ export function init(_window, _document, formId, fields, text, href, style, form
       fieldsErrors.style.display = 'none';
       const formData = {};
       for (const field of fields) {
-        formData[field['label'].toLowerCase()] = _document.getElementsByName(
-          field['label']
-        )[0].value;
+
+        let input
+        for (let node of inputNodes){
+          if(node.name===field['label']){
+            input=node
+            break
+          }
+        }
+        formData[field['label'].toLowerCase()] = input.value;
       }
 
       loaderWrapper.style.display = 'flex'
