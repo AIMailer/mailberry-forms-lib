@@ -199,6 +199,7 @@ const css = `
   }
 }
 `
+
 export function init(_window, _document, formId, fields, text, href, style, format, signature, showAt) {
   // add styles
   var styletag = _document.createElement('style');
@@ -608,4 +609,15 @@ export function init(_window, _document, formId, fields, text, href, style, form
 
   fetch(href);
 }
+
+
+
+export function addStylesSheet(_document,href){
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = href;
+  _document.getElementsByTagName('head')[0].appendChild(link);
+}
+
 
