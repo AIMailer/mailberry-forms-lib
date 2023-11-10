@@ -12,18 +12,25 @@ const FORM_POPUP_OPTIONS = {
   'at-30-percent-of-pageview': "at-30-percent-of-pageview"
 }
 
-const css = `
+const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionThanksMessageAndSignStyle }){
+  return `
 .MBheading {
   margin-top: 20px;
   margin-bottom: 20px;
   max-width: 400px;
   line-break: auto;
   text-align: center;
+  font-size: ${headStyle.fontSize}+px;
+  font-family: ${headStyle.fontFamily};
+  color: ${headStyle.color};
 }
 
 .MBdescription {
   line-height: 1.5;
   margin: 0;
+  font-size: ${descriptionThanksMessageAndSignStyle.fontSize}+px;
+  font-family: ${descriptionThanksMessageAndSignStyle.fontFamily};
+  color: ${descriptionThanksMessageAndSignStyle.color};
 }
 
 .MBdivider {
@@ -36,6 +43,7 @@ const css = `
 .MBform-container {
   width: 400px;
   border-radius: 12px;
+  background-color: ${mainStyle.formColor};
 }
 
 .MBform-builder-body {
@@ -80,6 +88,9 @@ const css = `
 .MBthank-you-message {
   margin: 10px;
   text-align: center;
+  font-size: ${descriptionThanksMessageAndSignStyle.fontSize}+px;
+  font-family: ${descriptionThanksMessageAndSignStyle.fontFamily};
+  color: ${descriptionThanksMessageAndSignStyle.color};
 }
 
 .MBerror-wrapper {
@@ -90,6 +101,9 @@ const css = `
 .MBerror-message {
   margin: 10px;
   text-align: center;
+  font-size: ${descriptionThanksMessageAndSignStyle.fontSize}+px;
+  font-family: ${descriptionThanksMessageAndSignStyle.fontFamily};
+  color: ${descriptionThanksMessageAndSignStyle.color};
 }
 
 .MBinput-wrapper {
@@ -116,6 +130,10 @@ const css = `
   border-radius: 5px;
   border: none;
   cursor: pointer;
+  font-size: ${btnStyle.fontSize}+px;
+  font-family: ${btnStyle.fontFamily};
+  color: ${btnStyle.color};
+  background-color: ${btnStyle.backgroundColor};
 }
 
 .MBsignature-wrapper {
@@ -127,12 +145,15 @@ const css = `
 .MBpowered-by {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8px;
+  color: ${descriptionThanksMessageAndSignStyle.color || 'black'};
 }
 
 .MBsignature {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8px;
   margin-left: 2px;
+  text-decoration-color: ${descriptionThanksMessageAndSignStyle.color};
+  color: ${descriptionThanksMessageAndSignStyle.color || 'black'};
 }
 
 .MBclose-btn {
@@ -143,6 +164,7 @@ const css = `
   font-size: 20px;
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
+  color: ${descriptionThanksMessageAndSignStyle.color || 'black'};
 }
 
 .MBspinner-wrapper {
@@ -172,6 +194,12 @@ const css = `
   background-color: rgba(0, 1, 5, 0.8);
 }
 
+.MBlabel {
+  font-size: ${labelStyle.fontSize}+px;
+  font-family: ${labelStyle.fontFamily};
+  color: ${labelStyle.color};
+}
+
 @keyframes MBspin-animation {
   0% {
     transform: rotate(0deg);
@@ -198,20 +226,20 @@ const css = `
     opacity: 0.2;
   }
 }
-`
+`}
 
 export function init(_window, _document, formId, fields, text, href, style, format, signature, showAt) {
   // add styles
   var styletag = _document.createElement('style');
   styletag.type = 'text/css';
-  styletag.innerHTML = css;
+  styletag.innerHTML = css(style);
   _document.getElementsByTagName('head')[0].appendChild(styletag);
 
   // add form
   const div = _document.getElementById(formId);
 
   const { header, description, thanksMessage, button } = text;
-  const { headStyle, labelStyle, btnStyle, mainStyle, descriptionThanksMessageAndSignStyle } = style;
+  const {  mainStyle } = style;
 
   //  ======== Form wrapper =========
 
@@ -226,9 +254,7 @@ export function init(_window, _document, formId, fields, text, href, style, form
     const heading = _document.createElement('p');
     heading.classList.add('MBheading');
     heading.innerHTML = header;
-    heading.style.fontSize = headStyle.fontSize + 'px';
-    heading.style.fontFamily = headStyle.fontFamily;
-    heading.style.color = headStyle.color;
+
     formWrapper.appendChild(heading);
   }
 
@@ -238,9 +264,7 @@ export function init(_window, _document, formId, fields, text, href, style, form
     const about = _document.createElement('p');
     about.classList.add('MBdescription');
     about.innerHTML = description;
-    about.style.fontSize = descriptionThanksMessageAndSignStyle.fontSize + 'px';
-    about.style.fontFamily = descriptionThanksMessageAndSignStyle.fontFamily;
-    about.style.color = descriptionThanksMessageAndSignStyle.color;
+
     formWrapper.appendChild(about);
 
     const divider = _document.createElement('hr');
@@ -277,10 +301,8 @@ export function init(_window, _document, formId, fields, text, href, style, form
     inputWrapper.classList.add('MBinput-wrapper');
 
     const label = _document.createElement('label');
+    label.classList.add('MBlabel')
     label.innerHTML = field['label'];
-    label.style.fontSize = labelStyle.fontSize + 'px';
-    label.style.fontFamily = labelStyle.fontFamily;
-    label.style.color = labelStyle.color;
 
     if (field['required']) {
       label.innerHTML += '*';
@@ -400,11 +422,6 @@ export function init(_window, _document, formId, fields, text, href, style, form
     }
   });
 
-  btn.style.fontSize = btnStyle.fontSize + 'px';
-  btn.style.fontFamily = btnStyle.fontFamily;
-  btn.style.color = btnStyle.color;
-  btn.style.backgroundColor = btnStyle.backgroundColor;
-
   btnWrapper.appendChild(btn);
   form.appendChild(btnWrapper);
 
@@ -418,10 +435,6 @@ export function init(_window, _document, formId, fields, text, href, style, form
   thankYouMessage.innerHTML = thanksMessage;
 
   thankYouMessage.classList.add('MBthank-you-message');
-
-  thankYouMessage.style.fontSize = descriptionThanksMessageAndSignStyle.fontSize + 'px';
-  thankYouMessage.style.fontFamily = descriptionThanksMessageAndSignStyle.fontFamily;
-  thankYouMessage.style.color = descriptionThanksMessageAndSignStyle.color;
 
   thankYouWrapper.appendChild(thankYouMessage);
 
@@ -437,10 +450,6 @@ export function init(_window, _document, formId, fields, text, href, style, form
 
   errorMessage.classList.add('MBerror-message');
 
-  errorMessage.style.fontSize = descriptionThanksMessageAndSignStyle.fontSize + 'px';
-  errorMessage.style.fontFamily = descriptionThanksMessageAndSignStyle.fontFamily;
-  errorMessage.style.color = descriptionThanksMessageAndSignStyle.color;
-
   errorWrapper.appendChild(errorMessage);
 
   //  ======== Mailberry Sign =========
@@ -452,13 +461,9 @@ export function init(_window, _document, formId, fields, text, href, style, form
   poweredBy.classList.add('MBpowered-by');
   const signatureContent = _document.createElement('p');
   signatureContent.classList.add('MBsignature');
-  signatureAnchor.style.textDecorationColor = descriptionThanksMessageAndSignStyle.color;
 
   poweredBy.innerHTML = 'Powered by';
   signatureContent.innerHTML = 'MailBerry';
-
-  poweredBy.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
-  signatureContent.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
 
   signatureAnchor.href = 'https://mailberry.ai/?utm_source=Form&utm_medium=Mailberry&utm_campaign=CustomersAreFrom';
   signatureAnchor.target = '_blank';
@@ -478,7 +483,6 @@ export function init(_window, _document, formId, fields, text, href, style, form
 
   const closePopup = _document.createElement('p');
   closePopup.classList.add('MBclose-btn');
-  closePopup.style.color = descriptionThanksMessageAndSignStyle.color || 'black';
   closePopup.innerHTML = 'X';
   closePopup.addEventListener('click', () => {
     div.style.display = 'none';
@@ -507,7 +511,6 @@ export function init(_window, _document, formId, fields, text, href, style, form
 
         // Checks if the user has scrolled at least 30% of the page
         if (scrollY + windowHeight >= thirtyPercentOfPageview) {
-          formContainer.style.backgroundColor = mainStyle.formColor
           formWrapper.appendChild(form);
 
           formContainer.appendChild(formWrapper);
@@ -559,7 +562,6 @@ export function init(_window, _document, formId, fields, text, href, style, form
       if(!lastClosed|| Date.now()>parseInt(lastClosed) +2592000000 ){
 
         setTimeout(() => {
-          formContainer.style.backgroundColor = mainStyle.formColor;
           formWrapper.appendChild(form);
   
           formContainer.appendChild(formWrapper);
@@ -598,7 +600,7 @@ export function init(_window, _document, formId, fields, text, href, style, form
     div.classList.add('MBform-builder-body')
   }
 
-  formContainer.style.backgroundColor = mainStyle.formColor
+
   formWrapper.appendChild(form);
 
   formContainer.appendChild(formWrapper);
