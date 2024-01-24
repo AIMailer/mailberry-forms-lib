@@ -242,8 +242,8 @@ export function init(_window, _document, formId, fields, text, href, style, sign
     const div = mailberryForm;
     const format = div.dataset.mailberryFormat;
     const showAt = div.dataset.mailberryPopupOption;
-    const formIsLoaded = div.dataset.mailberryFormIsLoaded;
-    if(formIsLoaded) return;
+    const formHasLoaded = div.dataset.mailberryHasLoaded;
+    if(formHasLoaded) return;
 
     const { header, description, thanksMessage, button } = text;
     const {  mainStyle } = style;
@@ -617,7 +617,7 @@ export function init(_window, _document, formId, fields, text, href, style, sign
     formContainer.appendChild(errorWrapper);
     div.appendChild(formContainer)
 
-    mailberryForm.dataset.mailberryFormIsLoaded = true;
+    mailberryForm.dataset.mailberryHasLoaded = true;
     fetch(href);
   })
 }
