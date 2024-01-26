@@ -228,390 +228,399 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
 }
 `}
 
-export function init(_window, _document, formId, fields, text, href, style, format, signature, showAt) {
+export function init(_window, _document, formId, fields, text, href, style, signature) {
   // add styles
   var styletag = _document.createElement('style');
   styletag.type = 'text/css';
   styletag.innerHTML = css(style);
   _document.getElementsByTagName('head')[0].appendChild(styletag);
 
-  // add form
-  const div = _document.getElementById(formId);
+  // inject content, styles and event to each form
+  const mailberryForms = _document.querySelectorAll(`div[data-mailberry-form-id]`);
 
-  const { header, description, thanksMessage, button } = text;
-  const {  mainStyle } = style;
+  mailberryForms.forEach((mailberryForm) => {
+    const div = mailberryForm;
+    const format = div.dataset.mailberryFormat;
+    const showAt = div.dataset.mailberryPopupOption;
+    const formHasLoaded = div.dataset.mailberryHasLoaded;
+    if(formHasLoaded) return;
 
-  //  ======== Form wrapper =========
+    const { header, description, thanksMessage, button } = text;
+    const {  mainStyle } = style;
+
+    //  ======== Form wrapper =========
 
 
-  const formWrapper = _document.createElement('div');
-  const formContainer = _document.createElement('div')
-  formContainer.classList.add('MBform-container');
-  formWrapper.classList.add('MBform-wrapper');
+    const formWrapper = _document.createElement('div');
+    const formContainer = _document.createElement('div')
+    formContainer.classList.add('MBform-container');
+    formWrapper.classList.add('MBform-wrapper');
 
-  //  ======== Header =========
-  if(header){
-    const heading = _document.createElement('p');
-    heading.classList.add('MBheading');
-    heading.innerHTML = header;
+    //  ======== Header =========
+    if(header){
+      const heading = _document.createElement('p');
+      heading.classList.add('MBheading');
+      heading.innerHTML = header;
 
-    formWrapper.appendChild(heading);
-  }
-
-  //  ======== Description =========
-
-  if(description){
-    const about = _document.createElement('p');
-    about.classList.add('MBdescription');
-    about.innerHTML = description;
-
-    formWrapper.appendChild(about);
-
-    const divider = _document.createElement('hr');
-    divider.classList.add('MBdivider');
-    formWrapper.appendChild(divider);
-  }
-
-  //  ======== Fields erros =========
-
-  const fieldsErrors = _document.createElement('ul');
-  fieldsErrors.style.color = 'red';
-  fieldsErrors.style.display = 'none';
-  fieldsErrors.style.fontSize = '14px';
-  fieldsErrors.style.fontFamily = 'Arial';
-
-  const emptyField = _document.createElement('li');
-  emptyField.innerHTML = 'Please fill in all required fields';
-  emptyField.style.display = 'none';
-
-  const invalidEmail = _document.createElement('li');
-  invalidEmail.innerHTML = 'Please enter a valid email address';
-  invalidEmail.style.display = 'none';
-
-  fieldsErrors.appendChild(invalidEmail);
-  fieldsErrors.appendChild(emptyField);
-  formWrapper.appendChild(fieldsErrors);
-
-  //  ======== Filds =========
-
-  const form = _document.createElement('form');
-
-  for (const field of fields) {
-    const inputWrapper = _document.createElement('div');
-    inputWrapper.classList.add('MBinput-wrapper');
-
-    const label = _document.createElement('label');
-    label.classList.add('MBlabel')
-    label.innerHTML = field['label'];
-
-    if (field['required']) {
-      label.innerHTML += '*';
+      formWrapper.appendChild(heading);
     }
 
-    inputWrapper.appendChild(label);
+    //  ======== Description =========
 
-    const input = _document.createElement('input');
-    input.type = field['type'];
-    input.name = field['label'];
-    input.classList.add('MBinput');
+    if(description){
+      const about = _document.createElement('p');
+      about.classList.add('MBdescription');
+      about.innerHTML = description;
 
-    if (field['required']) {
-      input.required = true;
+      formWrapper.appendChild(about);
+
+      const divider = _document.createElement('hr');
+      divider.classList.add('MBdivider');
+      formWrapper.appendChild(divider);
     }
 
-    inputWrapper.appendChild(input);
-    form.appendChild(inputWrapper);
-  }
+    //  ======== Fields erros =========
 
-  //  ======== Loader when submit =========
+    const fieldsErrors = _document.createElement('ul');
+    fieldsErrors.style.color = 'red';
+    fieldsErrors.style.display = 'none';
+    fieldsErrors.style.fontSize = '14px';
+    fieldsErrors.style.fontFamily = 'Arial';
+    fieldsErrors.style.paddingLeft = '0';
 
-  const loaderWrapper = _document.createElement('div');
-  const spinner = _document.createElement('div')
-  loaderWrapper.classList.add('MBform-wrapper');
-  loaderWrapper.classList.add('MBspinner-wrapper');
-  spinner.classList.add('MBspinner');
-  loaderWrapper.appendChild(spinner);
-  formContainer.appendChild(loaderWrapper);
+    const emptyField = _document.createElement('li');
+    emptyField.innerHTML = 'Please fill in all required fields';
+    emptyField.style.display = 'none';
 
+    const invalidEmail = _document.createElement('li');
+    invalidEmail.innerHTML = 'Please enter a valid email address';
+    invalidEmail.style.display = 'none';
 
-  //  ======== Submit Button =========
+    fieldsErrors.appendChild(invalidEmail);
+    fieldsErrors.appendChild(emptyField);
+    formWrapper.appendChild(fieldsErrors);
 
-  const btnWrapper = _document.createElement('div');
-  btnWrapper.classList.add('MBbtn-wrapper');
+    //  ======== Fields =========
 
-  const btn = _document.createElement('button');
-  btn.classList.add('MBbtn');
-  btn.type = 'submit';
-  btn.innerHTML = button;
-
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    let allFieldsFilled = true;
-
-    const inputNodes=form.getElementsByTagName('INPUT')
+    const form = _document.createElement('form');
 
     for (const field of fields) {
+      const inputWrapper = _document.createElement('div');
+      inputWrapper.classList.add('MBinput-wrapper');
+
+      const label = _document.createElement('label');
+      label.classList.add('MBlabel')
+      label.innerHTML = field['label'];
+
       if (field['required']) {
-
-        let input
-        for (let node of inputNodes){
-          if(node.name===field['label']){
-            input=node
-            break
-          }
-        }
-
-        if (!input.value) {
-          allFieldsFilled = false;
-          input.style.border = '1px solid red';
-          fieldsErrors.style.display = 'block';
-          emptyField.style.display = 'block';
-        } else if (
-          input.type === 'email' &&
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)
-        ) {
-          allFieldsFilled = false;
-          input.style.border = '1px solid red';
-          fieldsErrors.style.display = 'block';
-          invalidEmail.style.display = 'block';
-        } else {
-          input.style.border = '1px solid #ccc';
-        }
+        label.innerHTML += '*';
       }
+
+      inputWrapper.appendChild(label);
+
+      const input = _document.createElement('input');
+      input.type = field['type'];
+      input.name = field['label'];
+      input.classList.add('MBinput');
+
+      if (field['required']) {
+        input.required = true;
+      }
+
+      inputWrapper.appendChild(input);
+      form.appendChild(inputWrapper);
     }
 
-    if (allFieldsFilled) {
-      fieldsErrors.style.display = 'none';
-      const formData = {};
+    //  ======== Loader when submit =========
+
+    const loaderWrapper = _document.createElement('div');
+    const spinner = _document.createElement('div')
+    loaderWrapper.classList.add('MBform-wrapper');
+    loaderWrapper.classList.add('MBspinner-wrapper');
+    spinner.classList.add('MBspinner');
+    loaderWrapper.appendChild(spinner);
+    formContainer.appendChild(loaderWrapper);
+
+
+    //  ======== Submit Button =========
+
+    const btnWrapper = _document.createElement('div');
+    btnWrapper.classList.add('MBbtn-wrapper');
+
+    const btn = _document.createElement('button');
+    btn.classList.add('MBbtn');
+    btn.type = 'submit';
+    btn.innerHTML = button;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      let allFieldsFilled = true;
+
+      const inputNodes=form.getElementsByTagName('INPUT')
+
       for (const field of fields) {
+        if (field['required']) {
 
-        let input
-        for (let node of inputNodes){
-          if(node.name===field['label']){
-            input=node
-            break
+          let input
+          for (let node of inputNodes){
+            if(node.name===field['label']){
+              input=node
+              break
+            }
+          }
+
+          if (!input.value) {
+            allFieldsFilled = false;
+            input.style.border = '1px solid red';
+            fieldsErrors.style.display = 'block';
+            emptyField.style.display = 'block';
+          } else if (
+            input.type === 'email' &&
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)
+          ) {
+            allFieldsFilled = false;
+            input.style.border = '1px solid red';
+            fieldsErrors.style.display = 'block';
+            invalidEmail.style.display = 'block';
+          } else {
+            input.style.border = '1px solid #ccc';
           }
         }
-        formData[field['label'].toLowerCase()] = input.value;
       }
 
-      loaderWrapper.style.display = 'flex'
-      formWrapper.style.display = 'none';
+      if (allFieldsFilled) {
+        fieldsErrors.style.display = 'none';
+        const formData = {};
+        for (const field of fields) {
 
-      fetch(href, {
-        method: 'POST',
-        referrerPolicy: 'strict-origin-when-cross-origin',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
-          thankYouWrapper.style.display = 'block';
-          loaderWrapper.style.display = 'none';
-
-          localStorage.removeItem(`closed_${formId}`);
-          localStorage.setItem(`subscribed_${formId}`, Date.now());
-
-        })
-        .catch((err) => {
-          errorWrapper.style.display = 'block';
-          loaderWrapper.style.display = 'none';
-        })
-    }
-  });
-
-  btnWrapper.appendChild(btn);
-  form.appendChild(btnWrapper);
-
-  //  ======== Thanks you message =========
-
-  const thankYouWrapper = _document.createElement('div');
-  thankYouWrapper.classList.add('MBform-wrapper');
-  thankYouWrapper.classList.add('MBthank-you-wrapper');
-
-  const thankYouMessage = _document.createElement('p');
-  thankYouMessage.innerHTML = thanksMessage;
-
-  thankYouMessage.classList.add('MBthank-you-message');
-
-  thankYouWrapper.appendChild(thankYouMessage);
-
-  //  ======== Error message =========
-
-  const errorWrapper = _document.createElement('div');
-  errorWrapper.classList.add('MBform-wrapper');
-  errorWrapper.classList.add('MBerror-wrapper');
-
-  const errorMessage = _document.createElement('p');
-  errorMessage.innerHTML =
-    'Something went wrong.';
-
-  errorMessage.classList.add('MBerror-message');
-
-  errorWrapper.appendChild(errorMessage);
-
-  //  ======== Mailberry Sign =========
-
-  const signatureWrapper = _document.createElement('div');
-  signatureWrapper.classList.add('MBsignature-wrapper');
-  const signatureAnchor = _document.createElement('a');
-  const poweredBy = _document.createElement('p');
-  poweredBy.classList.add('MBpowered-by');
-  const signatureContent = _document.createElement('p');
-  signatureContent.classList.add('MBsignature');
-
-  poweredBy.innerHTML = 'Powered by';
-  signatureContent.innerHTML = 'MailBerry';
-
-  signatureAnchor.href = 'https://mailberry.ai/?utm_source=Form&utm_medium=Mailberry&utm_campaign=CustomersAreFrom';
-  signatureAnchor.target = '_blank';
-  signatureAnchor.rel = 'noopener noreferrer';
-
-  signatureAnchor.appendChild(signatureContent);
-
-  signatureWrapper.appendChild(poweredBy);
-  signatureWrapper.appendChild(signatureAnchor);
-
-  //  ======== Overlay container, if used =========
-  const overlayContainer = _document.createElement('div');
-  overlayContainer.classList.add('MBoverlay')
-  overlayContainer.style.zIndex = '9998';
-
-  //  ======== Popup close button =========
-
-  const closePopup = _document.createElement('p');
-  closePopup.classList.add('MBclose-btn');
-  closePopup.innerHTML = 'X';
-  closePopup.addEventListener('click', () => {
-    div.style.display = 'none';
-    overlayContainer.style.zIndex = '-99999';
-    overlayContainer.style.display = 'none'
-    formContainer.style.animation = 'MBopacity-out 0.2s linear';
-
-    const alreadySubscribed=localStorage.getItem(`subscribed_${formId}`)
-    if(!alreadySubscribed){
-      localStorage.setItem(`closed_${formId}`, Date.now());
-    }
-  });
-
-  if(format === FORMAT['popup']){
-    div.classList.add('MBform-builder-format-popup')
-    formContainer.appendChild(closePopup)
-
-    //  ======== At 30 percent of pageview =========
-    if(showAt === FORM_POPUP_OPTIONS['at-30-percent-of-pageview']){
-      function checkScrollPosition() {
-        const percent = 0.3
-        const scrollY = _window.scrollY;
-        const fullHeight = _document.documentElement.scrollHeight;
-        const windowHeight = _window.innerHeight;
-        const thirtyPercentOfPageview = fullHeight * percent;
-
-        // Checks if the user has scrolled at least 30% of the page
-        if (scrollY + windowHeight >= thirtyPercentOfPageview) {
-          formWrapper.appendChild(form);
-
-          formContainer.appendChild(formWrapper);
-          formContainer.appendChild(thankYouWrapper);
-          if(signature)formWrapper.appendChild(signatureWrapper);
-          formContainer.appendChild(errorWrapper);
-          div.appendChild(formContainer)
-
-           // we already have a div with an id so we need to append it at body element
-          overlayContainer.appendChild(div);
-          _document.body.appendChild(overlayContainer);
-          formContainer.style.animation = 'MBopacity-in 0.4s linear';
-          overlayContainer.style.cursor = 'pointer';
-          formContainer.style.cursor = 'auto'
-
-          overlayContainer.addEventListener('click', (e) => {
-            if(event.target === overlayContainer){
-              overlayContainer.style.zIndex = '-99999';
-              overlayContainer.style.display = 'none'
-              formContainer.style.animation = 'MBopacity-out 0.2s linear';
+          let input
+          for (let node of inputNodes){
+            if(node.name===field['label']){
+              input=node
+              break
             }
-          })
-
-          fetch(href)
-
-          // removing the event if the form it has already been called
-          _window.removeEventListener('scroll', checkScrollPosition);
-          return
+          }
+          formData[field['label'].toLowerCase()] = input.value;
         }
-      }
 
-      _window.addEventListener('scroll', checkScrollPosition);
-      return
-    }
-    //  ======== With time =========
-    else {
-      let timer = 0;
-      if(showAt === FORM_POPUP_OPTIONS['immediately']) timer = 0;
-      if(showAt === FORM_POPUP_OPTIONS['after-10-seconds']) timer = 10;
-      if(showAt === FORM_POPUP_OPTIONS['after-30-seconds']) timer = 30;
+        loaderWrapper.style.display = 'flex'
+        formWrapper.style.display = 'none';
+
+        fetch(href, {
+          method: 'POST',
+          referrerPolicy: 'strict-origin-when-cross-origin',
+          body: JSON.stringify(formData),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((res) => {
+            thankYouWrapper.style.display = 'block';
+            loaderWrapper.style.display = 'none';
+
+            localStorage.removeItem(`closed_${formId}`);
+            localStorage.setItem(`subscribed_${formId}`, Date.now());
+
+          })
+          .catch((err) => {
+            errorWrapper.style.display = 'block';
+            loaderWrapper.style.display = 'none';
+          })
+      }
+    });
+
+    btnWrapper.appendChild(btn);
+    form.appendChild(btnWrapper);
+
+    //  ======== Thanks you message =========
+
+    const thankYouWrapper = _document.createElement('div');
+    thankYouWrapper.classList.add('MBform-wrapper');
+    thankYouWrapper.classList.add('MBthank-you-wrapper');
+
+    const thankYouMessage = _document.createElement('p');
+    thankYouMessage.innerHTML = thanksMessage;
+
+    thankYouMessage.classList.add('MBthank-you-message');
+
+    thankYouWrapper.appendChild(thankYouMessage);
+
+    //  ======== Error message =========
+
+    const errorWrapper = _document.createElement('div');
+    errorWrapper.classList.add('MBform-wrapper');
+    errorWrapper.classList.add('MBerror-wrapper');
+
+    const errorMessage = _document.createElement('p');
+    errorMessage.innerHTML =
+      'Something went wrong.';
+
+    errorMessage.classList.add('MBerror-message');
+
+    errorWrapper.appendChild(errorMessage);
+
+    //  ======== Mailberry Sign =========
+
+    const signatureWrapper = _document.createElement('div');
+    signatureWrapper.classList.add('MBsignature-wrapper');
+    const signatureAnchor = _document.createElement('a');
+    const poweredBy = _document.createElement('p');
+    poweredBy.classList.add('MBpowered-by');
+    const signatureContent = _document.createElement('p');
+    signatureContent.classList.add('MBsignature');
+
+    poweredBy.innerHTML = 'Powered by';
+    signatureContent.innerHTML = 'MailBerry';
+
+    signatureAnchor.href = 'https://mailberry.ai/?utm_source=Form&utm_medium=Mailberry&utm_campaign=CustomersAreFrom';
+    signatureAnchor.target = '_blank';
+    signatureAnchor.rel = 'noopener noreferrer';
+
+    signatureAnchor.appendChild(signatureContent);
+
+    signatureWrapper.appendChild(poweredBy);
+    signatureWrapper.appendChild(signatureAnchor);
+
+    //  ======== Overlay container, if used =========
+    const overlayContainer = _document.createElement('div');
+    overlayContainer.classList.add('MBoverlay')
+    overlayContainer.style.zIndex = '9998';
+
+    //  ======== Popup close button =========
+
+    const closePopup = _document.createElement('p');
+    closePopup.classList.add('MBclose-btn');
+    closePopup.innerHTML = 'X';
+    closePopup.addEventListener('click', () => {
+      div.style.display = 'none';
+      overlayContainer.style.zIndex = '-99999';
+      overlayContainer.style.display = 'none'
+      formContainer.style.animation = 'MBopacity-out 0.2s linear';
 
       const alreadySubscribed=localStorage.getItem(`subscribed_${formId}`)
-
-      if(alreadySubscribed) return
-
-      const lastClosed=localStorage.getItem(`closed_${formId}`)
-
-      //30 days in miliseconds 2592000000
-      if(!lastClosed|| Date.now()>parseInt(lastClosed) +2592000000 ){
-
-        setTimeout(() => {
-          formWrapper.appendChild(form);
-  
-          formContainer.appendChild(formWrapper);
-          formContainer.appendChild(thankYouWrapper);
-          if(signature)formWrapper.appendChild(signatureWrapper);
-          formContainer.appendChild(errorWrapper);
-          div.appendChild(formContainer)
-  
-          // we already have a div with an id so we need to append it at body element
-          overlayContainer.appendChild(div);
-          _document.body.appendChild(overlayContainer);
-          formContainer.style.animation = 'MBopacity-in 0.4s linear';
-          overlayContainer.style.cursor = 'pointer';
-          formContainer.style.cursor = 'auto'
-  
-          overlayContainer.addEventListener('click', (e) => {
-            if(event.target === overlayContainer){
-              overlayContainer.style.zIndex = '-99999';
-              overlayContainer.style.display = 'none';
-              formContainer.style.animation = 'MBopacity-out 0.2s linear';
-            }
-          })
-  
-          fetch(href)
-        }, timer * 1000);
-
+      if(!alreadySubscribed){
+        localStorage.setItem(`closed_${formId}`, Date.now());
       }
+    });
 
-      return
+    if(format === FORMAT['popup']){
+      div.classList.add('MBform-builder-format-popup')
+      formContainer.appendChild(closePopup)
+
+      //  ======== At 30 percent of pageview =========
+      if(showAt === FORM_POPUP_OPTIONS['at-30-percent-of-pageview']){
+        function checkScrollPosition() {
+          const percent = 0.3
+          const scrollY = _window.scrollY;
+          const fullHeight = _document.documentElement.scrollHeight;
+          const windowHeight = _window.innerHeight;
+          const thirtyPercentOfPageview = fullHeight * percent;
+
+          // Checks if the user has scrolled at least 30% of the page
+          if (scrollY + windowHeight >= thirtyPercentOfPageview) {
+            formWrapper.appendChild(form);
+
+            formContainer.appendChild(formWrapper);
+            formContainer.appendChild(thankYouWrapper);
+            if(signature)formWrapper.appendChild(signatureWrapper);
+            formContainer.appendChild(errorWrapper);
+            div.appendChild(formContainer)
+
+            // we already have a div with an id so we need to append it at body element
+            overlayContainer.appendChild(div);
+            _document.body.appendChild(overlayContainer);
+            formContainer.style.animation = 'MBopacity-in 0.4s linear';
+            overlayContainer.style.cursor = 'pointer';
+            formContainer.style.cursor = 'auto'
+
+            overlayContainer.addEventListener('click', (e) => {
+              if(event.target === overlayContainer){
+                overlayContainer.style.zIndex = '-99999';
+                overlayContainer.style.display = 'none'
+                formContainer.style.animation = 'MBopacity-out 0.2s linear';
+              }
+            })
+
+            fetch(href)
+
+            // removing the event if the form it has already been called
+            _window.removeEventListener('scroll', checkScrollPosition);
+            return
+          }
+        }
+
+        _window.addEventListener('scroll', checkScrollPosition);
+        return
+      }
+      //  ======== With time =========
+      else {
+        let timer = 0;
+        if(showAt === FORM_POPUP_OPTIONS['immediately']) timer = 0;
+        if(showAt === FORM_POPUP_OPTIONS['after-10-seconds']) timer = 10;
+        if(showAt === FORM_POPUP_OPTIONS['after-30-seconds']) timer = 30;
+
+        const alreadySubscribed=localStorage.getItem(`subscribed_${formId}`)
+
+        if(alreadySubscribed) return
+
+        const lastClosed=localStorage.getItem(`closed_${formId}`)
+
+        //30 days in miliseconds 2592000000
+        if(!lastClosed|| Date.now()>parseInt(lastClosed) +2592000000 ){
+
+          setTimeout(() => {
+            formWrapper.appendChild(form);
+    
+            formContainer.appendChild(formWrapper);
+            formContainer.appendChild(thankYouWrapper);
+            if(signature)formWrapper.appendChild(signatureWrapper);
+            formContainer.appendChild(errorWrapper);
+            div.appendChild(formContainer)
+    
+            // we already have a div with an id so we need to append it at body element
+            overlayContainer.appendChild(div);
+            _document.body.appendChild(overlayContainer);
+            formContainer.style.animation = 'MBopacity-in 0.4s linear';
+            overlayContainer.style.cursor = 'pointer';
+            formContainer.style.cursor = 'auto'
+    
+            overlayContainer.addEventListener('click', (e) => {
+              if(event.target === overlayContainer){
+                overlayContainer.style.zIndex = '-99999';
+                overlayContainer.style.display = 'none';
+                formContainer.style.animation = 'MBopacity-out 0.2s linear';
+              }
+            })
+    
+            fetch(href)
+          }, timer * 1000);
+
+        }
+
+        return
+      }
     }
-  }
 
-  if(format === FORMAT['page']){
-    _document.body.style.backgroundColor = mainStyle.pageColor
-    _document.body.classList.add('MBform-builder-format-page')
-    div.classList.add('MBform-builder-body')
-  }
+    if(format === FORMAT['page']){
+      _document.body.style.backgroundColor = mainStyle.pageColor
+      _document.body.classList.add('MBform-builder-format-page')
+      div.classList.add('MBform-builder-body')
+    }
 
 
-  formWrapper.appendChild(form);
+    formWrapper.appendChild(form);
 
-  formContainer.appendChild(formWrapper);
-  formContainer.appendChild(thankYouWrapper);
-  if(signature)formWrapper.appendChild(signatureWrapper);
-  formContainer.appendChild(errorWrapper);
-  div.appendChild(formContainer)
+    formContainer.appendChild(formWrapper);
+    formContainer.appendChild(thankYouWrapper);
+    if(signature)formWrapper.appendChild(signatureWrapper);
+    formContainer.appendChild(errorWrapper);
+    div.appendChild(formContainer)
 
-  fetch(href);
+    mailberryForm.dataset.mailberryHasLoaded = true;
+    fetch(href);
+  })
 }
-
 
 
 export function addStylesSheet(_document,href){
