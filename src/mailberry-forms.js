@@ -20,7 +20,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   max-width: 400px;
   line-break: auto;
   text-align: center;
-  font-size: ${headStyle.fontSize}+px;
+  font-size: ${headStyle.fontSize}px;
   font-family: ${headStyle.fontFamily};
   color: ${headStyle.color};
 }
@@ -28,7 +28,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
 .MBdescription {
   line-height: 1.5;
   margin: 0;
-  font-size: ${descriptionThanksMessageAndSignStyle.fontSize}+px;
+  font-size: ${descriptionThanksMessageAndSignStyle.fontSize}px;
   font-family: ${descriptionThanksMessageAndSignStyle.fontFamily};
   color: ${descriptionThanksMessageAndSignStyle.color};
 }
@@ -38,6 +38,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   border: none;
   margin: 1em 0;
   background-color: #ccc;
+  cursor: auto;
 }
 
 .MBform-container {
@@ -88,7 +89,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
 .MBthank-you-message {
   margin: 10px;
   text-align: center;
-  font-size: ${descriptionThanksMessageAndSignStyle.fontSize}+px;
+  font-size: ${descriptionThanksMessageAndSignStyle.fontSize}px;
   font-family: ${descriptionThanksMessageAndSignStyle.fontFamily};
   color: ${descriptionThanksMessageAndSignStyle.color};
 }
@@ -101,7 +102,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
 .MBerror-message {
   margin: 10px;
   text-align: center;
-  font-size: ${descriptionThanksMessageAndSignStyle.fontSize}+px;
+  font-size: ${descriptionThanksMessageAndSignStyle.fontSize}px;
   font-family: ${descriptionThanksMessageAndSignStyle.fontFamily};
   color: ${descriptionThanksMessageAndSignStyle.color};
 }
@@ -130,7 +131,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   border-radius: 5px;
   border: none;
   cursor: pointer;
-  font-size: ${btnStyle.fontSize}+px;
+  font-size: ${btnStyle.fontSize}px;
   font-family: ${btnStyle.fontFamily};
   color: ${btnStyle.color};
   background-color: ${btnStyle.backgroundColor};
@@ -195,7 +196,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
 }
 
 .MBlabel {
-  font-size: ${labelStyle.fontSize}+px;
+  font-size: ${labelStyle.fontSize}px;
   font-family: ${labelStyle.fontFamily};
   color: ${labelStyle.color};
 }
@@ -233,7 +234,11 @@ export function init(_window, _document, formId, fields, text, href, style, sign
   var styletag = _document.createElement('style');
   styletag.type = 'text/css';
   styletag.innerHTML = css(style);
-  _document.getElementsByTagName('head')[0].appendChild(styletag);
+
+  // inject styles if not already injected
+  if (!_document.getElementById('mailberry-forms-styles')) {
+    _document.getElementsByTagName('head')[0].appendChild(styletag);
+  }
 
   // inject content, styles and event to each form
   const mailberryForms = _document.querySelectorAll(`div[data-mailberry-form-id]`);
