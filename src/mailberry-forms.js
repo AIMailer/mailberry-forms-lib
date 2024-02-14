@@ -337,7 +337,6 @@ export function init(_window, _document, formId, fields, text, href, style, sign
         label.innerHTML += '*';
       }
 
-      inputWrapper.appendChild(label);
 
       const input = _document.createElement('input');
       input.type = field['type'];
@@ -353,7 +352,13 @@ export function init(_window, _document, formId, fields, text, href, style, sign
         input.required = true;
       }
 
-      inputWrapper.appendChild(input);
+      if(field['type'] === 'checkbox'){
+        inputWrapper.appendChild(input);
+        inputWrapper.appendChild(label);
+      }else {
+        inputWrapper.appendChild(label);
+        inputWrapper.appendChild(input);
+      }
       form.appendChild(inputWrapper);
     }
 
