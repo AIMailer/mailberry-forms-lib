@@ -119,6 +119,18 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   margin-bottom: 5px;
 }
 
+.Mailberry-checkbox-wrapper {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.Mailberry-checkbox {
+  width: 16px;
+  height; 16px;
+}
+
 .MBbtn-wrapper {
   margin-top: 20px;
   display: flex;
@@ -311,13 +323,17 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 
     for (const field of fields) {
       const inputWrapper = _document.createElement('div');
-      inputWrapper.classList.add('MBinput-wrapper');
+      if(field['type'] === 'checkbox') inputWrapper.classList.add('Mailberry-checkbox-wrapper');
+      else inputWrapper.classList.add('MBinput-wrapper');
 
       const label = _document.createElement('label');
       label.classList.add('MBlabel')
       label.innerHTML = field['label'];
+      if (field['type'] === 'checkbox') {
+        label.htmlFor = field['label'];
+      }
 
-      if (field['required']) {
+      if (field['required'] && field['type'] !== 'checkbox') {
         label.innerHTML += '*';
       }
 
@@ -326,7 +342,12 @@ export function init(_window, _document, formId, fields, text, href, style, sign
       const input = _document.createElement('input');
       input.type = field['type'];
       input.name = field['label'];
-      input.classList.add('MBinput');
+      if(field['type'] === 'checkbox'){
+        input.id = field['label'];
+        input.classList.add('Mailberry-checkbox');
+      }else {
+        input.classList.add('MBinput');
+      }
 
       if (field['required']) {
         input.required = true;
