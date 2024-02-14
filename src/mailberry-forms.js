@@ -323,36 +323,41 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 
     for (const field of fields) {
       const inputWrapper = _document.createElement('div');
-      if(field['type'] === 'checkbox') inputWrapper.classList.add('Mailberry-checkbox-wrapper');
+      const fieldType = field['type'];
+      const fieldLabel = field['label'];
+      const fieldName = fieldLabel.split(' ').join('-');
+      const fieldRequired = field['required'];
+
+      if(fieldType === 'checkbox') inputWrapper.classList.add('Mailberry-checkbox-wrapper');
       else inputWrapper.classList.add('MBinput-wrapper');
 
       const label = _document.createElement('label');
       label.classList.add('MBlabel')
       label.innerHTML = field['label'];
-      if (field['type'] === 'checkbox') {
+      if (fieldType === 'checkbox') {
         label.htmlFor = field['label'];
       }
 
-      if (field['required'] && field['type'] !== 'checkbox') {
+      if (fieldRequired && fieldType !== 'checkbox') {
         label.innerHTML += '*';
       }
 
 
       const input = _document.createElement('input');
-      input.type = field['type'];
-      input.name = field['label'];
-      if(field['type'] === 'checkbox'){
+      input.type = fieldType;
+      input.name = fieldName;
+      if(fieldType === 'checkbox'){
         input.id = field['label'];
         input.classList.add('Mailberry-checkbox');
       }else {
         input.classList.add('MBinput');
       }
 
-      if (field['required']) {
+      if (fieldRequired) {
         input.required = true;
       }
 
-      if(field['type'] === 'checkbox'){
+      if(fieldType === 'checkbox'){
         inputWrapper.appendChild(input);
         inputWrapper.appendChild(label);
       }else {
@@ -424,15 +429,24 @@ export function init(_window, _document, formId, fields, text, href, style, sign
         fieldsErrors.style.display = 'none';
         const formData = {};
         for (const field of fields) {
+          const fieldType = field['type'];
+          const fieldLabel = field['label'];
+          const fieldName = fieldLabel.split(' ').join('-');
 
           let input
           for (let node of inputNodes){
-            if(node.name===field['label']){
+            console.log({ node })
+            if(node.name === fieldName){
               input=node
               break
             }
           }
-          formData[field['label'].toLowerCase()] = input.value;
+
+          if (fieldType === 'checkbox') {
+            formData[fieldLabel.toLowerCase()] = input.checked;
+          } else{
+            formData[fieldLabel.toLowerCase()] = input.value;
+          }
         }
 
         loaderWrapper.style.display = 'flex'
