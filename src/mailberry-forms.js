@@ -429,9 +429,9 @@ export function init(_window, _document, formId, fields, text, href, style, sign
         fieldsErrors.style.display = 'none';
         const formData = {};
         for (const field of fields) {
-          const fieldType = field['type'];
-          const fieldLabel = field['label'];
-          const fieldName = fieldLabel.split(' ').join('-');
+          const fieldType = field['type']?.toLowerCase();
+          const fieldLabel = field['label']?.toLowerCase();
+          const fieldName = fieldLabel.split(' ').join('-')?.toLowerCase();
 
           let input
           for (let node of inputNodes){
@@ -443,9 +443,9 @@ export function init(_window, _document, formId, fields, text, href, style, sign
           }
 
           if (fieldType === 'checkbox') {
-            formData[fieldLabel.toLowerCase()] = input.checked;
+            formData[fieldLabel] = input.checked;
           } else{
-            formData[fieldLabel.toLowerCase()] = input.value;
+            formData[fieldLabel] = input.value;
           }
         }
 
