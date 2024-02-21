@@ -323,9 +323,9 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 
     for (const field of fields) {
       const inputWrapper = _document.createElement('div');
-      const fieldType = field['type'];
-      const fieldLabel = field['label'];
-      const fieldName = fieldLabel.split(' ').join('-');
+      const fieldType = field['type']?.toLowerCase();
+      const fieldLabel = field['label']?.toLowerCase();
+      const fieldName = fieldLabel?.toLowerCase().split(' ').join('-');
       const fieldRequired = field['required'];
 
       if(fieldType === 'checkbox') inputWrapper.classList.add('Mailberry-checkbox-wrapper');
@@ -396,11 +396,12 @@ export function init(_window, _document, formId, fields, text, href, style, sign
       const inputNodes=form.getElementsByTagName('INPUT')
 
       for (const field of fields) {
+        const fieldName = field['label']?.toLowerCase().split(' ').join('-');
         if (field['required']) {
 
           let input
           for (let node of inputNodes){
-            if(node.name===field['label']){
+            if(node.name=== fieldName){
               input=node
               break
             }
@@ -435,7 +436,6 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 
           let input
           for (let node of inputNodes){
-            console.log({ node })
             if(node.name === fieldName){
               input=node
               break
