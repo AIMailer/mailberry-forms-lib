@@ -119,6 +119,18 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   margin-bottom: 5px;
 }
 
+.Mailberry-checkbox-wrapper {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.Mailberry-checkbox {
+  width: 16px;
+  height; 16px;
+}
+
 .MBbtn-wrapper {
   margin-top: 20px;
   display: flex;
@@ -311,28 +323,47 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 
     for (const field of fields) {
       const inputWrapper = _document.createElement('div');
-      inputWrapper.classList.add('MBinput-wrapper');
+      const fieldType = field['type'];
+      const fieldLabel = field['label'];
+      const fieldName = fieldLabel.split(' ').join('-');
+      const fieldRequired = field['required'];
+
+      if(fieldType === 'checkbox') inputWrapper.classList.add('Mailberry-checkbox-wrapper');
+      else inputWrapper.classList.add('MBinput-wrapper');
 
       const label = _document.createElement('label');
       label.classList.add('MBlabel')
       label.innerHTML = field['label'];
+      if (fieldType === 'checkbox') {
+        label.htmlFor = field['label'];
+      }
 
-      if (field['required']) {
+      if (fieldRequired && fieldType !== 'checkbox') {
         label.innerHTML += '*';
       }
 
-      inputWrapper.appendChild(label);
 
       const input = _document.createElement('input');
-      input.type = field['type'];
-      input.name = field['label'];
-      input.classList.add('MBinput');
+      input.type = fieldType;
+      input.name = fieldName;
+      if(fieldType === 'checkbox'){
+        input.id = field['label'];
+        input.classList.add('Mailberry-checkbox');
+      }else {
+        input.classList.add('MBinput');
+      }
 
-      if (field['required']) {
+      if (fieldRequired) {
         input.required = true;
       }
 
-      inputWrapper.appendChild(input);
+      if(fieldType === 'checkbox'){
+        inputWrapper.appendChild(input);
+        inputWrapper.appendChild(label);
+      }else {
+        inputWrapper.appendChild(label);
+        inputWrapper.appendChild(input);
+      }
       form.appendChild(inputWrapper);
     }
 
@@ -398,15 +429,24 @@ export function init(_window, _document, formId, fields, text, href, style, sign
         fieldsErrors.style.display = 'none';
         const formData = {};
         for (const field of fields) {
+          const fieldType = field['type']?.toLowerCase();
+          const fieldLabel = field['label']?.toLowerCase();
+          const fieldName = fieldLabel.split(' ').join('-')?.toLowerCase();
 
           let input
           for (let node of inputNodes){
-            if(node.name===field['label']){
+            console.log({ node })
+            if(node.name === fieldName){
               input=node
               break
             }
           }
-          formData[field['label'].toLowerCase()] = input.value;
+
+          if (fieldType === 'checkbox') {
+            formData[fieldLabel] = input.checked;
+          } else{
+            formData[fieldLabel] = input.value;
+          }
         }
 
         loaderWrapper.style.display = 'flex'
