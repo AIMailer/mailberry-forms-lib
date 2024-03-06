@@ -549,11 +549,20 @@ export function init(_window, _document, formId, fields, text, href, style, sign
       }
     });
 
-    if(format === FORMAT['popup']){
+    if(format === FORMAT['popup']) {
       div.classList.add('MBform-builder-format-popup')
       formContainer.appendChild(closePopup)
 
-      //  ======== At 30 percent of pageview =========
+      const alreadySubscribed=localStorage.getItem(`subscribed_${formId}`)
+
+      if(alreadySubscribed) return;
+
+      const lastClosed=localStorage.getItem(`closed_${formId}`)
+
+      // 30 days in miliseconds 2592000000
+      if (lastClosed && Date.now() < (parseInt(lastClosed) +2592000000) ) return;
+
+      // ======== At 30 percent of pageview =========
       if(showAt === FORM_POPUP_OPTIONS['at-30-percent-of-pageview']){
         function checkScrollPosition() {
           const percent = 0.3
@@ -605,43 +614,32 @@ export function init(_window, _document, formId, fields, text, href, style, sign
         if(showAt === FORM_POPUP_OPTIONS['after-10-seconds']) timer = 10;
         if(showAt === FORM_POPUP_OPTIONS['after-30-seconds']) timer = 30;
 
-        const alreadySubscribed=localStorage.getItem(`subscribed_${formId}`)
+        setTimeout(() => {
+          formWrapper.appendChild(form);
 
-        if(alreadySubscribed) return
+          formContainer.appendChild(formWrapper);
+          formContainer.appendChild(thankYouWrapper);
+          if(signature)formWrapper.appendChild(signatureWrapper);
+          formContainer.appendChild(errorWrapper);
+          div.appendChild(formContainer)
 
-        const lastClosed=localStorage.getItem(`closed_${formId}`)
+          // we already have a div with an id so we need to append it at body element
+          overlayContainer.appendChild(div);
+          _document.body.appendChild(overlayContainer);
+          formContainer.style.animation = 'MBopacity-in 0.4s linear';
+          overlayContainer.style.cursor = 'pointer';
+          formContainer.style.cursor = 'auto'
 
-        //30 days in miliseconds 2592000000
-        if(!lastClosed|| Date.now()>parseInt(lastClosed) +2592000000 ){
+          overlayContainer.addEventListener('click', (e) => {
+            if(event.target === overlayContainer){
+              overlayContainer.style.zIndex = '-99999';
+              overlayContainer.style.display = 'none';
+              formContainer.style.animation = 'MBopacity-out 0.2s linear';
+            }
+          })
 
-          setTimeout(() => {
-            formWrapper.appendChild(form);
-    
-            formContainer.appendChild(formWrapper);
-            formContainer.appendChild(thankYouWrapper);
-            if(signature)formWrapper.appendChild(signatureWrapper);
-            formContainer.appendChild(errorWrapper);
-            div.appendChild(formContainer)
-    
-            // we already have a div with an id so we need to append it at body element
-            overlayContainer.appendChild(div);
-            _document.body.appendChild(overlayContainer);
-            formContainer.style.animation = 'MBopacity-in 0.4s linear';
-            overlayContainer.style.cursor = 'pointer';
-            formContainer.style.cursor = 'auto'
-    
-            overlayContainer.addEventListener('click', (e) => {
-              if(event.target === overlayContainer){
-                overlayContainer.style.zIndex = '-99999';
-                overlayContainer.style.display = 'none';
-                formContainer.style.animation = 'MBopacity-out 0.2s linear';
-              }
-            })
-    
-            fetch(href)
-          }, timer * 1000);
-
-        }
+          fetch(href)
+        }, timer * 1000);
 
         return
       }
