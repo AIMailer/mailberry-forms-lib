@@ -1,6 +1,6 @@
 {
   "name": "mailberry-forms",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "",
   "main": "dist/mailberry-forms.js",
   "scripts": {

@@ -1,4 +1,3 @@
-
 const FORMAT = {
   snippet: "snippet",
   popup: "popup",
@@ -12,9 +11,15 @@ const FORM_POPUP_OPTIONS = {
   'at-30-percent-of-pageview': "at-30-percent-of-pageview"
 }
 
-const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionThanksMessageAndSignStyle }){
+export function createMBStyleSheet(formId, {
+  headStyle,
+  labelStyle,
+  btnStyle,
+  mainStyle,
+  descriptionThanksMessageAndSignStyle
+}) {
   return `
-.MBheading {
+.MBheading${formId} {
   margin-top: 20px;
   margin-bottom: 20px;
   max-width: 400px;
@@ -25,7 +30,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   color: ${headStyle.color};
 }
 
-.MBdescription {
+.MBdescription${formId} {
   line-height: 1.5;
   margin: 0;
   font-size: ${descriptionThanksMessageAndSignStyle.fontSize}px;
@@ -33,7 +38,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   color: ${descriptionThanksMessageAndSignStyle.color};
 }
 
-.MBdivider {
+.MBdivider${formId} {
   padding: 1px 1px;
   border: none;
   margin: 1em 0;
@@ -41,13 +46,13 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   cursor: auto;
 }
 
-.MBform-container {
+.MBform-container${formId} {
   width: 400px;
   border-radius: 12px;
   background-color: ${mainStyle.formColor};
 }
 
-.MBform-builder-body {
+.MBform-builder-body${formId} {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,7 +61,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   border-radius: 5px;
 }
 
-.MBform-builder-format-page {
+.MBform-builder-format-page${formId} {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -64,7 +69,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   align-items: center;
 }
 
-.MBform-builder-format-popup {
+.MBform-builder-format-popup${formId} {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -72,7 +77,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   z-index: 9999;
 }
 
-.MBform-wrapper {
+.MBform-wrapper${formId} {
   width: 400px;
   padding-top: 30px;
   padding-left: 30px;
@@ -81,12 +86,12 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   box-sizing: border-box;
 }
 
-.MBthank-you-wrapper {
+.MBthank-you-wrapper${formId} {
   display: none;
   padding-bottom: 20px;
 }
 
-.MBthank-you-message {
+.MBthank-you-message${formId} {
   margin: 10px;
   text-align: center;
   font-size: ${descriptionThanksMessageAndSignStyle.fontSize}px;
@@ -94,12 +99,12 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   color: ${descriptionThanksMessageAndSignStyle.color};
 }
 
-.MBerror-wrapper {
+.MBerror-wrapper${formId} {
   display: none;
   padding-bottom: 20px;
 }
 
-.MBerror-message {
+.MBerror-message${formId} {
   margin: 10px;
   text-align: center;
   font-size: ${descriptionThanksMessageAndSignStyle.fontSize}px;
@@ -107,38 +112,38 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   color: ${descriptionThanksMessageAndSignStyle.color};
 }
 
-.MBinput-wrapper {
+.MBinput-wrapper${formId} {
   display: flex;
   flex-direction: column;
 }
 
-.MBinput {
+.MBinput${formId} {
   padding: 11px;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 5px;
 }
 
-.Mailberry-checkbox-wrapper {
+.Mailberry-checkbox-wrapper${formId} {
   display: flex;
   gap: 4px;
   align-items: center;
   margin-bottom: 5px;
 }
 
-.Mailberry-checkbox {
+.Mailberry-checkbox${formId} {
   width: 16px;
   height; 16px;
 }
 
-.MBbtn-wrapper {
+.MBbtn-wrapper${formId} {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
   width: 100%;
 }
 
-.MBbtn {
+.MBbtn${formId} {
   padding: 8px;
   border-radius: 5px;
   border: none;
@@ -149,19 +154,19 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   background-color: ${btnStyle.backgroundColor};
 }
 
-.MBsignature-wrapper {
+.MBsignature-wrapper${formId} {
   margin-top: 20px;
   display: flex;
   justify-content: center;
 }
 
-.MBpowered-by {
+.MBpowered-by${formId} {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8px;
   color: ${descriptionThanksMessageAndSignStyle.color || 'black'};
 }
 
-.MBsignature {
+.MBsignature${formId} {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8px;
   margin-left: 2px;
@@ -169,7 +174,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   color: ${descriptionThanksMessageAndSignStyle.color || 'black'};
 }
 
-.MBclose-btn {
+.MBclose-btn${formId} {
   margin: 20px 0;
   position: absolute;
   top: 0;
@@ -180,14 +185,14 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   color: ${descriptionThanksMessageAndSignStyle.color || 'black'};
 }
 
-.MBspinner-wrapper {
+.MBspinner-wrapper${formId} {
   display: none;
   justify-content: center;
   items-content: center;
   padding-bottom: 30px;
 }
 
-.MBspinner {
+.MBspinner${formId} {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -196,7 +201,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   animation: MBspin-animation 1s linear infinite;
 }
 
-.MBoverlay {
+.MBoverlay${formId} {
   width: 100% !important;
   height: 100% !important;
   min-width: 100%;
@@ -207,13 +212,13 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   background-color: rgba(0, 1, 5, 0.8);
 }
 
-.MBlabel {
+.MBlabel${formId} {
   font-size: ${labelStyle.fontSize}px;
   font-family: ${labelStyle.fontFamily};
   color: ${labelStyle.color};
 }
 
-@keyframes MBspin-animation {
+@keyframes MBspin-animation${formId} {
   0% {
     transform: rotate(0deg);
   }
@@ -222,7 +227,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   }
 }
 
-@keyframes MBopacity-in {
+@keyframes MBopacity-in${formId} {
   from {
     opacity: 0.2;
   }
@@ -231,7 +236,7 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
   }
 }
 
-@keyframes MBopacity-out {
+@keyframes MBopacity-out${formId} {
   from {
     opacity: 1;
   }
@@ -239,64 +244,54 @@ const css =function({ headStyle, labelStyle, btnStyle, mainStyle, descriptionTha
     opacity: 0.2;
   }
 }
-`}
+`
+}
 
 export function init(_window, _document, formId, fields, text, href, style, signature) {
-  // add styles
-  var styletag = _document.createElement('style');
-  styletag.type = 'text/css';
-  styletag.innerHTML = css(style);
-
-  // inject styles if not already injected
-  if (!_document.getElementById('mailberry-forms-styles')) {
-    _document.getElementsByTagName('head')[0].appendChild(styletag);
-  }
-
   // inject content, styles and event to each form
-  const mailberryForms = _document.querySelectorAll(`div[data-mailberry-form-id]`);
+  const mailberryForms = _document.querySelectorAll(`div[data-mailberry-form-id="${formId}"]`);
 
   mailberryForms.forEach((mailberryForm) => {
     const div = mailberryForm;
     const format = div.dataset.mailberryFormat;
     const showAt = div.dataset.mailberryPopupOption;
     const formHasLoaded = div.dataset.mailberryHasLoaded;
-    if(formHasLoaded) return;
+    if (formHasLoaded) return;
 
-    const { header, description, thanksMessage, button } = text;
-    const {  mainStyle } = style;
+    const {header, description, thanksMessage, button} = text;
+    const {mainStyle} = style;
 
-    //  ======== Form wrapper =========
-
+    // ======== Form wrapper =========
 
     const formWrapper = _document.createElement('div');
     const formContainer = _document.createElement('div')
-    formContainer.classList.add('MBform-container');
-    formWrapper.classList.add('MBform-wrapper');
+    formContainer.classList.add(`MBform-container${formId}`);
+    formWrapper.classList.add(`MBform-wrapper${formId}`);
 
-    //  ======== Header =========
-    if(header){
+    // ======== Header =========
+    if (header) {
       const heading = _document.createElement('p');
-      heading.classList.add('MBheading');
+      heading.classList.add(`MBheading${formId}`);
       heading.innerHTML = header;
 
       formWrapper.appendChild(heading);
     }
 
-    //  ======== Description =========
+    // ======== Description =========
 
-    if(description){
+    if (description) {
       const about = _document.createElement('p');
-      about.classList.add('MBdescription');
+      about.classList.add(`MBdescription${formId}`);
       about.innerHTML = description;
 
       formWrapper.appendChild(about);
 
       const divider = _document.createElement('hr');
-      divider.classList.add('MBdivider');
+      divider.classList.add(`MBdivider${formId}`);
       formWrapper.appendChild(divider);
     }
 
-    //  ======== Fields erros =========
+    // ======== Fields erros =========
 
     const fieldsErrors = _document.createElement('ul');
     fieldsErrors.style.color = 'red';
@@ -317,7 +312,7 @@ export function init(_window, _document, formId, fields, text, href, style, sign
     fieldsErrors.appendChild(emptyField);
     formWrapper.appendChild(fieldsErrors);
 
-    //  ======== Fields =========
+    // ======== Fields =========
 
     const form = _document.createElement('form');
 
@@ -328,11 +323,11 @@ export function init(_window, _document, formId, fields, text, href, style, sign
       const fieldName = fieldLabel?.toLowerCase().split(' ').join('-');
       const fieldRequired = field['required'];
 
-      if(fieldType === 'checkbox') inputWrapper.classList.add('Mailberry-checkbox-wrapper');
-      else inputWrapper.classList.add('MBinput-wrapper');
+      if (fieldType === 'checkbox') inputWrapper.classList.add('Mailberry-checkbox-wrapper');
+      else inputWrapper.classList.add(`MBinput-wrapper${formId}`);
 
       const label = _document.createElement('label');
-      label.classList.add('MBlabel')
+      label.classList.add(`MBlabel${formId}`)
       label.innerHTML = field['label'];
       if (fieldType === 'checkbox') {
         label.htmlFor = field['label'];
@@ -342,25 +337,24 @@ export function init(_window, _document, formId, fields, text, href, style, sign
         label.innerHTML += '*';
       }
 
-
       const input = _document.createElement('input');
       input.type = fieldType;
       input.name = fieldName;
-      if(fieldType === 'checkbox'){
+      if (fieldType === 'checkbox') {
         input.id = field['label'];
-        input.classList.add('Mailberry-checkbox');
-      }else {
-        input.classList.add('MBinput');
+        input.classList.add(`Mailberry-checkbox${formId}`);
+      } else {
+        input.classList.add(`MBinput${formId}`);
       }
 
       if (fieldRequired) {
         input.required = true;
       }
 
-      if(fieldType === 'checkbox'){
+      if (fieldType === 'checkbox') {
         inputWrapper.appendChild(input);
         inputWrapper.appendChild(label);
-      }else {
+      } else {
         inputWrapper.appendChild(label);
         inputWrapper.appendChild(input);
       }
@@ -371,20 +365,19 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 
     const loaderWrapper = _document.createElement('div');
     const spinner = _document.createElement('div')
-    loaderWrapper.classList.add('MBform-wrapper');
-    loaderWrapper.classList.add('MBspinner-wrapper');
-    spinner.classList.add('MBspinner');
+    loaderWrapper.classList.add(`MBform-wrapper${formId}`);
+    loaderWrapper.classList.add(`MBspinner-wrapper${formId}`);
+    spinner.classList.add(`MBspinner${formId}`);
     loaderWrapper.appendChild(spinner);
     formContainer.appendChild(loaderWrapper);
 
-
-    //  ======== Submit Button =========
+    // ======== Submit Button =========
 
     const btnWrapper = _document.createElement('div');
-    btnWrapper.classList.add('MBbtn-wrapper');
+    btnWrapper.classList.add(`MBbtn-wrapper${formId}`);
 
     const btn = _document.createElement('button');
-    btn.classList.add('MBbtn');
+    btn.classList.add(`MBbtn${formId}`);
     btn.type = 'submit';
     btn.innerHTML = button;
 
@@ -393,16 +386,16 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 
       let allFieldsFilled = true;
 
-      const inputNodes=form.getElementsByTagName('INPUT')
+      const inputNodes = form.getElementsByTagName('INPUT')
 
       for (const field of fields) {
         const fieldName = field['label']?.toLowerCase().split(' ').join('-');
         if (field['required']) {
 
           let input
-          for (let node of inputNodes){
-            if(node.name=== fieldName){
-              input=node
+          for (let node of inputNodes) {
+            if (node.name === fieldName) {
+              input = node
               break
             }
           }
@@ -435,16 +428,16 @@ export function init(_window, _document, formId, fields, text, href, style, sign
           const fieldName = fieldLabel.split(' ').join('-')?.toLowerCase();
 
           let input
-          for (let node of inputNodes){
-            if(node.name === fieldName){
-              input=node
+          for (let node of inputNodes) {
+            if (node.name === fieldName) {
+              input = node
               break
             }
           }
 
           if (fieldType === 'checkbox') {
             formData[fieldLabel] = input.checked;
-          } else{
+          } else {
             formData[fieldLabel] = input.value;
           }
         }
@@ -478,42 +471,42 @@ export function init(_window, _document, formId, fields, text, href, style, sign
     btnWrapper.appendChild(btn);
     form.appendChild(btnWrapper);
 
-    //  ======== Thanks you message =========
+    // ======== Thanks you message =========
 
     const thankYouWrapper = _document.createElement('div');
-    thankYouWrapper.classList.add('MBform-wrapper');
-    thankYouWrapper.classList.add('MBthank-you-wrapper');
+    thankYouWrapper.classList.add(`MBform-wrapper${formId}`);
+    thankYouWrapper.classList.add(`MBthank-you-wrapper${formId}`);
 
     const thankYouMessage = _document.createElement('p');
     thankYouMessage.innerHTML = thanksMessage;
 
-    thankYouMessage.classList.add('MBthank-you-message');
+    thankYouMessage.classList.add(`MBthank-you-message${formId}`);
 
     thankYouWrapper.appendChild(thankYouMessage);
 
-    //  ======== Error message =========
+    // ======== Error message =========
 
     const errorWrapper = _document.createElement('div');
-    errorWrapper.classList.add('MBform-wrapper');
-    errorWrapper.classList.add('MBerror-wrapper');
+    errorWrapper.classList.add(`MBform-wrapper${formId}`);
+    errorWrapper.classList.add(`MBerror-wrapper${formId}`);
 
     const errorMessage = _document.createElement('p');
     errorMessage.innerHTML =
       'Something went wrong.';
 
-    errorMessage.classList.add('MBerror-message');
+    errorMessage.classList.add(`MBerror-message${formId}`);
 
     errorWrapper.appendChild(errorMessage);
 
-    //  ======== Mailberry Sign =========
+    // ======== Mailberry Sign =========
 
     const signatureWrapper = _document.createElement('div');
-    signatureWrapper.classList.add('MBsignature-wrapper');
+    signatureWrapper.classList.add(`MBsignature-wrapper${formId}`);
     const signatureAnchor = _document.createElement('a');
     const poweredBy = _document.createElement('p');
-    poweredBy.classList.add('MBpowered-by');
+    poweredBy.classList.add(`MBpowered-by${formId}`);
     const signatureContent = _document.createElement('p');
-    signatureContent.classList.add('MBsignature');
+    signatureContent.classList.add(`MBsignature${formId}`);
 
     poweredBy.innerHTML = 'Powered by';
     signatureContent.innerHTML = 'MailBerry';
@@ -527,15 +520,15 @@ export function init(_window, _document, formId, fields, text, href, style, sign
     signatureWrapper.appendChild(poweredBy);
     signatureWrapper.appendChild(signatureAnchor);
 
-    //  ======== Overlay container, if used =========
+    // ======== Overlay container, if used =========
     const overlayContainer = _document.createElement('div');
-    overlayContainer.classList.add('MBoverlay')
+    overlayContainer.classList.add(`MBoverlay${formId}`)
     overlayContainer.style.zIndex = '9998';
 
-    //  ======== Popup close button =========
+    // ======== Popup close button =========
 
     const closePopup = _document.createElement('p');
-    closePopup.classList.add('MBclose-btn');
+    closePopup.classList.add(`MBclose-btn${formId}`);
     closePopup.innerHTML = 'X';
     closePopup.addEventListener('click', () => {
       div.style.display = 'none';
@@ -543,27 +536,27 @@ export function init(_window, _document, formId, fields, text, href, style, sign
       overlayContainer.style.display = 'none'
       formContainer.style.animation = 'MBopacity-out 0.2s linear';
 
-      const alreadySubscribed=localStorage.getItem(`subscribed_${formId}`)
-      if(!alreadySubscribed){
+      const alreadySubscribed = localStorage.getItem(`subscribed_${formId}`)
+      if (!alreadySubscribed) {
         localStorage.setItem(`closed_${formId}`, Date.now());
       }
     });
 
-    if(format === FORMAT['popup']) {
-      div.classList.add('MBform-builder-format-popup')
+    if (format === FORMAT['popup']) {
+      div.classList.add(`MBform-builder-format-popup${formId}`)
       formContainer.appendChild(closePopup)
 
-      const alreadySubscribed=localStorage.getItem(`subscribed_${formId}`)
+      const alreadySubscribed = localStorage.getItem(`subscribed_${formId}`)
 
-      if(alreadySubscribed) return;
+      if (alreadySubscribed) return;
 
-      const lastClosed=localStorage.getItem(`closed_${formId}`)
+      const lastClosed = localStorage.getItem(`closed_${formId}`)
 
       // 30 days in miliseconds 2592000000
-      if (lastClosed && Date.now() < (parseInt(lastClosed) +2592000000) ) return;
+      if (lastClosed && Date.now() < (parseInt(lastClosed) + 2592000000)) return;
 
       // ======== At 30 percent of pageview =========
-      if(showAt === FORM_POPUP_OPTIONS['at-30-percent-of-pageview']){
+      if (showAt === FORM_POPUP_OPTIONS['at-30-percent-of-pageview']) {
         function checkScrollPosition() {
           const percent = 0.3
           const scrollY = _window.scrollY;
@@ -577,7 +570,7 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 
             formContainer.appendChild(formWrapper);
             formContainer.appendChild(thankYouWrapper);
-            if(signature)formWrapper.appendChild(signatureWrapper);
+            if (signature) formWrapper.appendChild(signatureWrapper);
             formContainer.appendChild(errorWrapper);
             div.appendChild(formContainer)
 
@@ -589,7 +582,7 @@ export function init(_window, _document, formId, fields, text, href, style, sign
             formContainer.style.cursor = 'auto'
 
             overlayContainer.addEventListener('click', (e) => {
-              if(event.target === overlayContainer){
+              if (event.target === overlayContainer) {
                 overlayContainer.style.zIndex = '-99999';
                 overlayContainer.style.display = 'none'
                 formContainer.style.animation = 'MBopacity-out 0.2s linear';
@@ -607,19 +600,19 @@ export function init(_window, _document, formId, fields, text, href, style, sign
         _window.addEventListener('scroll', checkScrollPosition);
         return
       }
-      //  ======== With time =========
+      // ======== With time =========
       else {
         let timer = 0;
-        if(showAt === FORM_POPUP_OPTIONS['immediately']) timer = 0;
-        if(showAt === FORM_POPUP_OPTIONS['after-10-seconds']) timer = 10;
-        if(showAt === FORM_POPUP_OPTIONS['after-30-seconds']) timer = 30;
+        if (showAt === FORM_POPUP_OPTIONS['immediately']) timer = 0;
+        if (showAt === FORM_POPUP_OPTIONS['after-10-seconds']) timer = 10;
+        if (showAt === FORM_POPUP_OPTIONS['after-30-seconds']) timer = 30;
 
         setTimeout(() => {
           formWrapper.appendChild(form);
 
           formContainer.appendChild(formWrapper);
           formContainer.appendChild(thankYouWrapper);
-          if(signature)formWrapper.appendChild(signatureWrapper);
+          if (signature) formWrapper.appendChild(signatureWrapper);
           formContainer.appendChild(errorWrapper);
           div.appendChild(formContainer)
 
@@ -631,7 +624,7 @@ export function init(_window, _document, formId, fields, text, href, style, sign
           formContainer.style.cursor = 'auto'
 
           overlayContainer.addEventListener('click', (e) => {
-            if(event.target === overlayContainer){
+            if (event.target === overlayContainer) {
               overlayContainer.style.zIndex = '-99999';
               overlayContainer.style.display = 'none';
               formContainer.style.animation = 'MBopacity-out 0.2s linear';
@@ -645,10 +638,10 @@ export function init(_window, _document, formId, fields, text, href, style, sign
       }
     }
 
-    if(format === FORMAT['page']){
+    if (format === FORMAT['page']) {
       _document.body.style.backgroundColor = mainStyle.pageColor
-      _document.body.classList.add('MBform-builder-format-page')
-      div.classList.add('MBform-builder-body')
+      _document.body.classList.add(`MBform-builder-format-page${formId}`)
+      div.classList.add(`MBform-builder-body${formId}`)
     }
 
 
@@ -656,7 +649,7 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 
     formContainer.appendChild(formWrapper);
     formContainer.appendChild(thankYouWrapper);
-    if(signature)formWrapper.appendChild(signatureWrapper);
+    if (signature) formWrapper.appendChild(signatureWrapper);
     formContainer.appendChild(errorWrapper);
     div.appendChild(formContainer)
 
@@ -666,12 +659,17 @@ export function init(_window, _document, formId, fields, text, href, style, sign
 }
 
 
-export function addStylesSheet(_document,href){
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.type = 'text/css';
-  link.href = href;
-  _document.getElementsByTagName('head')[0].appendChild(link);
+export function addStylesSheet(_document, styles) {
+  // add styles
+  var styletag = _document.createElement('style');
+  styletag.type = 'text/css';
+  // styletag.innerHTML = createMBStyleSheet(style);
+  styletag.innerHTML = styles;
+
+  // inject styles if not already injected
+  // if (!_document.getElementById('mailberry-forms-styles')) {
+  _document.getElementsByTagName('head')[0].appendChild(styletag);
+  // }
 }
 
 
